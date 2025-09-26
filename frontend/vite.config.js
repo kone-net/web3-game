@@ -5,4 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: './',
+  build: {
+    outDir: '../docs', // 默认是 dist，可修改为自定义路径（如 'build'、'public' 等）
+  }
 })
