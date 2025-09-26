@@ -80,8 +80,8 @@ function ManagementInterface() {
   const { data: ticketsData, refetch: refetchTickets, isLoading: isTicketsLoading } = useReadContract({
     address: contractAddress,
     abi: ticketCollectionABI,
-    // functionName: 'getAllUrls',
-    functionName: 'getTickets',
+    functionName: 'getAllUrls',
+    // functionName: 'getTickets',
   })
 
   console.log("data are ", ticketsData, isTicketsLoading, "address:", address)
@@ -153,8 +153,8 @@ function ManagementInterface() {
       const hash = await writeContract({
         address: contractAddress,
         abi: ticketCollectionABI,
-        // functionName: 'addUrl',
-        functionName: 'addTicket',
+        functionName: 'addUrl',
+        // functionName: 'addTicket',
         args: [ticketUrl],
       })
       
