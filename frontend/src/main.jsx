@@ -14,7 +14,7 @@ const queryClient = new QueryClient()
 
 // Create RainbowKit config
 const rainbowConfig = getDefaultConfig({
-  appName: '票据收藏管理系统',
+  appName: 'Web3游戏平台',
   projectId: '12345678901234567890123456789012', // 开发环境临时ID
   chains: [mainnet, goerli, localhost, hardhat],
   transports: {

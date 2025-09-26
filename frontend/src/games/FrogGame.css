@@ -1,0 +1,244 @@
+/* FrogGame.css */
+.frog-game {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  user-select: none;
+}
+
+/* 游戏控制区域 */
+.frog-game-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, #2e8b57, #8fbc8f);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.frog-game-scores {
+  display: flex;
+  gap: 20px;
+}
+
+.score-box {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-align: center;
+  min-width: 100px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.score-label {
+  font-size: 14px;
+  color: #4a4a4a;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.score-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2e7d32;
+  line-height: 1;
+}
+
+.frog-game-new-game {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.frog-game-new-game:hover {
+  background: #ee5253;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.3);
+}
+
+/* 画布容器 */
+.frog-game-canvas-container {
+  position: relative;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.frog-game-canvas {
+  display: block;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  border: 3px solid #2e8b57;
+  border-radius: 12px;
+}
+
+/* 游戏说明 */
+.frog-game-instructions {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: #4a4a4a;
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 移动设备控制按钮 */
+.frog-game-mobile-controls {
+  display: none; /* 默认隐藏，在移动设备上显示 */
+  position: relative;
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.control-button {
+  position: absolute;
+  background: rgba(46, 139, 87, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.control-button:hover {
+  background: rgba(46, 139, 87, 1);
+  transform: scale(1.1);
+}
+
+.control-button:active {
+  transform: scale(0.95);
+}
+
+.control-button.up {
+  top: 10px;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  transform: translateX(-50%);
+}
+
+.control-row {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+.control-button.left,
+.control-button.down,
+.control-button.right {
+  width: 70px;
+  height: 70px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .frog-game-controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .frog-game-scores {
+    width: 100%;
+    justify-content: space-around;
+  }
+  
+  .frog-game-new-game {
+    width: 100%;
+  }
+  
+  .score-value {
+    font-size: 24px;
+  }
+  
+  .frog-game-instructions {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* 在移动设备上显示控制按钮 */
+  .frog-game-mobile-controls {
+    display: block;
+  }
+  
+  .frog-game-canvas {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* 动画效果 */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 游戏结束状态 */
+.game-over {
+  animation: pulse 1s infinite;
+}
+
+/* 高分显示效果 */
+.score-value.high-score {
+  color: #ff9800;
+  animation: pulse 0.5s ease-in-out 2;
+}
+
+/* 跳跃按钮的额外样式 */
+.jump-indicator {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  color: #ff6b6b;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.control-button:active .jump-indicator {
+  opacity: 1;
+}
+
+/* 确保游戏在不同缩放级别下的稳定性 */
+.frog-game-canvas {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}

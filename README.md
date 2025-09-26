@@ -31,3 +31,5 @@ build: {
     outDir: '../docs', // 默认是 dist，可修改为自定义路径（如 'build'、'public' 等）
   },
 ```
+## 在线合约调试
+https://remix.ethereum.org/

@@ -1,0 +1,261 @@
+/* GamePage.css */
+.game-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* 游戏头部 */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  margin-bottom: 20px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.game-header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.home-button {
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-button:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.game-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.game-icon {
+  font-size: 32px;
+}
+
+.game-title h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.game-header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.score-display {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.score-label {
+  display: block;
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-bottom: 4px;
+}
+
+.score-value {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.wallet-prompt {
+  background: #ff6b6b;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+/* 游戏内容区域 */
+.game-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+/* 游戏底部 */
+.game-footer {
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* 保存状态 */
+.save-status {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.save-status.saving {
+  background: #f39c12;
+  color: white;
+}
+
+.save-status.success {
+  background: #27ae60;
+  color: white;
+}
+
+.save-status.error {
+  background: #e74c3c;
+  color: white;
+}
+
+/* 游戏结束菜单 */
+.game-over-menu {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.game-over-menu h2 {
+  font-size: 28px;
+  color: #e74c3c;
+  margin-bottom: 10px;
+}
+
+.game-over-menu p {
+  font-size: 24px;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.save-score-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.save-score-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.save-score-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.game-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.restart-button,
+.profile-button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.restart-button {
+  background: #3498db;
+  color: white;
+}
+
+.restart-button:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.profile-button {
+  background: #2ecc71;
+  color: white;
+}
+
+.profile-button:hover {
+  background: #27ae60;
+  transform: translateY(-2px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .game-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .game-header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .game-title h1 {
+    font-size: 24px;
+  }
+  
+  .score-value {
+    font-size: 24px;
+  }
+  
+  .game-actions {
+    flex-direction: column;
+  }
+  
+  .restart-button,
+  .profile-button {
+    width: 100%;
+  }
+}

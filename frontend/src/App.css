@@ -1,23 +1,42 @@
-/* 全局样式重置和基础设置 */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* App.css - 现代Web3游戏平台设计 */
+
+/* 基础样式重置 */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f7fa;
-  color: #333;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--gray-50);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 深色模式 */
+body.dark {
+  --gray-50: #111827;
+  --gray-100: #1f2937;
+  --gray-200: #374151;
+  --gray-300: #4b5563;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #d1d5db;
+  --gray-700: #e5e7eb;
+  --gray-800: #f3f4f6;
+  --gray-900: #f9fafb;
+  
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* 应用容器 */
@@ -25,77 +44,125 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  max-width: 1200px;
+  max-width: 1280px;
+  width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 1.5rem;
 }
 
 /* 头部样式 */
 .app-header {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  animation: slideDown 0.4s ease-out;
+}
+
+body.dark .app-header {
+  background: rgba(17, 24, 39, 0.8);
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 0;
-  border-bottom: 1px solid #e1e8ed;
-  margin-bottom: 30px;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-.app-header h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.wallet-section {
-  margin: 20px 0;
-  text-align: center;
-}
-  
-.wallet-actions {
+.header-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-  
-.disconnect-button {
-  background-color: #ff6b6b;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-  
-.disconnect-button:hover {
-  background-color: #ee5253;
-}
-  
-.account-info {
-  font-size: 14px;
-  color: #333;
-  word-break: break-all;
+  gap: 0.5rem;
 }
 
+.header-logo span {
+  font-size: 1.8rem;
+}
+
+.header-nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.header-nav a {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.header-nav a:hover {
+  color: var(--primary);
+}
+
+.header-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+
+.header-nav a:hover::after {
+  width: 100%;
+}
+
+/* 钱包连接按钮 */
 .connect-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .connect-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.connect-button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .connect-button:disabled {
@@ -104,318 +171,288 @@ body {
   transform: none;
 }
 
+/* 账户信息 */
 .account-info {
-  background-color: #ecf0f1;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  color: #2c3e50;
-}
-
-/* 主要内容区域 */
-.app-main {
-  flex: 1;
-}
-
-/* 上传区域 */
-.upload-section {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.upload-section h2 {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #2c3e50;
-}
-
-.upload-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: stretch;
-  }
-  
-  .refresh-button {
-    background-color: #4a9eff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .refresh-button:hover:not(:disabled) {
-    background-color: #357abd;
-  }
-  
-  .refresh-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
-
-/* 状态提示信息 */
-.status-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.status-info:first-of-type {
-  margin-top: 10px;
-}
-
-/* 不同状态的颜色 */
-.upload-form > .status-info:nth-child(4) {
-  background-color: #fff3cd;
-  color: #856404;
-}
-
-.upload-form > .status-info:nth-child(5) {
-  background-color: #e3f2fd;
-  color: #1565c0;
-}
-
-.upload-form > .status-info:nth-child(6) {
-  background-color: #ffebee;
-  color: #c62828;
-}
-
-.ticket-input {
-  flex: 1;
-  padding: 12px 16px;
-  border: 2px solid #e1e8ed;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  color: #333;
 }
 
-.ticket-input:focus {
-  outline: none;
-  border-color: #667eea;
-}
-
-.ticket-input:disabled {
-  background-color: #f8f9fa;
-  cursor: not-allowed;
-}
-
-.upload-button {
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+.disconnect-button {
+  background: #e74c3c;
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  white-space: nowrap;
+  transition: background-color 0.3s ease;
 }
 
-.upload-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+.disconnect-button:hover {
+  background: #c0392b;
 }
 
-.upload-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+/* 主内容区域 */
+.app-main {
+  flex: 1;
+  padding: 20px 0;
 }
 
-/* 票据列表区域 */
-.tickets-section {
-  background: white;
+/* 加载状态 */
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: white;
+  padding: 50px;
+}
+
+/* 错误状态 */
+.error {
+  text-align: center;
+  color: #e74c3c;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 用户游戏个人主页样式 */
+.profile-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 40px;
+  color: white;
+}
+
+.profile-header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+  font-weight: 800;
+}
+
+.profile-header p {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+/* 统计卡片 */
+.stats-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
   padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.stat-item {
+  padding: 20px;
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
-.tickets-section h2 {
-  font-size: 22px;
-  font-weight: 600;
+.stat-item:hover {
+  transform: translateY(-5px);
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: #667eea;
+  margin-bottom: 10px;
+}
+
+.stat-label {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* 游戏记录区域 */
+.game-records-section,
+.all-games-section {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 24px;
   margin-bottom: 20px;
-  color: #2c3e50;
+  color: #333;
+  text-align: center;
 }
 
-.tickets-list {
+.no-games-message {
+  text-align: center;
+  color: #666;
+  padding: 30px;
+  font-size: 18px;
+}
+
+/* 游戏记录卡片 */
+.game-records-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 16px;
+  gap: 20px;
 }
 
-.ticket-item {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid #e9ecef;
-    transition: all 0.3s ease;
-  }
+.game-record-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-  .ticket-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: #667eea;
-  }
-  
-  .ticket-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .ticket-label {
-    font-weight: 600;
-    color: #2c3e50;
-    font-size: 14px;
-  }
-  
-  .url-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  
-  .ticket-url {
-    flex: 1;
-    min-width: 0;
-    word-break: break-all;
-    padding: 8px 12px;
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 13px;
-    color: #343a40;
-  }
-  
-  .copy-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: 1px solid #e9ecef;
-    border-radius: 6px;
-    background-color: #ffffff;
-    color: #495057;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s ease;
-    flex-shrink: 0;
-  }
-  
-  .copy-button:hover {
-    background-color: #f8f9fa;
-    border-color: #adb5bd;
-    transform: translateY(-1px);
-  }
-  
-  .copy-button:active {
-    transform: translateY(0);
-  }
-  
-  .copy-button.copied {
-    background-color: #89de9d;
-    color: white;
-    border-color: #aaecb9;
-  }
-  
-  .copy-button.copied:hover {
-    background-color: #bae8c4;
-    border-color: #b6dcbf;
-  }
+.game-record-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
 
-.ticket-id {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+.game-record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.game-record-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+}
+
+.game-record-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.record-stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.record-stat:last-child {
+  border-bottom: none;
+}
+
+.stat-name {
+  font-size: 14px;
+  color: #666;
+}
+
+.stat-data {
   font-size: 16px;
-  color: #2c3e50;
-  font-weight: 500;
-}
-
-/* 加载和空状态 */
-.loading,
-.no-wallet,
-.no-tickets {
-  text-align: center;
-  padding: 40px 20px;
-  color: #6c757d;
-  font-size: 16px;
-}
-
-.loading {
+  font-weight: 600;
   color: #667eea;
 }
 
-/* 页脚样式 */
-.app-footer {
-  margin-top: auto;
-  padding: 20px 0;
-  text-align: center;
-  color: #7f8c8d;
-  border-top: 1px solid #e1e8ed;
-}
-
-/* RainbowKit 连接按钮样式 */
-.rainbowkit-connect-button {
-  background-color: #6366f1;
+.play-again-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
   border: none;
   border-radius: 8px;
-  padding: 12px 24px;
-  color: white;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+.play-again-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* 所有游戏列表 */
+.all-games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.game-list-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+}
+
+.game-list-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.game-list-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.game-list-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.game-list-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.play-game-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
   font-size: 16px;
-  transition: background-color 0.2s ease;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.rainbowkit-connect-button:hover {
-  background-color: #4f46e5;
-}
-
-.rainbowkit-connect-button:disabled {
-  background-color: #a5b4fc;
-  cursor: not-allowed;
-}
-
-/* 响应式设计 */
-@media (max-width: 768px) {
-  .app-header {
-    flex-direction: column;
-    gap: 20px;
-    text-align: center;
-  }
-  
-  .upload-form {
-    flex-direction: column;
-  }
-  
-  .ticket-input {
-    width: 100%;
-  }
-  
-  .upload-button {
-    width: 100%;
-  }
-  
-  .tickets-list {
-    grid-template-columns: 1fr;
-  }
-  
-  .app-container {
-    padding: 0 15px;
-  }
+.play-game-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
 /* 交易状态显示样式 */
@@ -453,22 +490,79 @@ body {
   border-left: 4px solid #dc3545;
 }
 
-/* 上一次交易哈希回显样式 */
-.last-transaction {
-  margin-top: 12px;
-  padding: 12px 16px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #e9ecef;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 13px;
-  color: #495057;
+/* 页脚样式 */
+.app-footer {
+  margin-top: auto;
+  padding: 20px 0;
   text-align: center;
-  word-break: break-all;
-  transition: all 0.3s ease;
+  color: rgba(255, 255, 255, 0.7);
 }
 
-.last-transaction:hover {
-  background-color: #e9ecef;
-  border-color: #dee2e6;
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+  
+  .header-nav {
+    justify-content: center;
+  }
+  
+  .profile-container {
+    padding: 10px;
+  }
+  
+  .profile-header h1 {
+    font-size: 28px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stat-value {
+    font-size: 28px;
+  }
+  
+  .game-records-grid,
+  .all-games-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-card,
+  .game-records-section,
+  .all-games-section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-main {
+    padding: 20px 10px;
+  }
+  
+  .header-logo {
+    font-size: 20px;
+  }
+  
+  .header-nav {
+    gap: 15px;
+  }
+  
+  .profile-header h1 {
+    font-size: 24px;
+  }
+  
+  .connect-button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+  
+  .account-info {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+  }
 }

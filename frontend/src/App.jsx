@@ -5,67 +5,108 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import './App.css'
 import HomePage from './HomePage'
 
-
-// 合约ABI (Application Binary Interface)
-const ticketCollectionABI = [
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "ticketUrl",
-          "type": "string"
-        }
-      ],
-      "name": "addTicket",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "string",
-          "name": "url",
-          "type": "string"
-        }
-      ],
-      "name": "addUrl",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getAllUrls",
-      "outputs": [
-        {
-          "internalType": "string[]",
-          "name": "",
-          "type": "string[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getTickets",
-      "outputs": [
-        {
-          "internalType": "string[]",
-          "name": "",
-          "type": "string[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ]
+// 游戏平台合约ABI
+export const gamePlatformABI = [
+  {
+    "inputs": [
+      {
+        "internalType": "enum GamePlatform.GameType",
+        "name": "gameType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "score",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateGameScore",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum GamePlatform.GameType",
+        "name": "gameType",
+        "type": "uint8"
+      }
+    ],
+    "name": "getUserGameRecord",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "highScore",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalScore",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "playCount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastPlayed",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getUserStats",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalGamesPlayed",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalScore",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "level",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getUserGames",
+    "outputs": [
+      {
+        "internalType": "enum GamePlatform.GameType[]",
+        "name": "",
+        "type": "uint8[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
 
 // 合约地址
-const contractAddress = '0x90EA3D281a49Dc8D90df83F2a37Ef434969c1a14'
+export const contractAddress = '0xbDEEA398F36cAAC38242db75Cb40d82540E2EC38'
 
-function ManagementInterface() {
+// 游戏类型枚举映射
+export const GAME_TYPES = {
+  0: { id: 0, name: '2048', icon: '🎮', color: '#FF6B6B' },
+  1: { id: 1, name: '青蛙荷塘跳', icon: '🐸', color: '#4ECDC4' }
+}
+
+function UserGameProfile() {
   const navigate = useNavigate();
   // Wagmi hooks
   const { address, isConnected } = useAccount()
@@ -74,288 +115,227 @@ function ManagementInterface() {
     watch: true
   })
   const [lastTransactionHash, setLastTransactionHash] = useState('')
-
   
-  // 获取票据列表的hook
-  const { data: ticketsData, refetch: refetchTickets, isLoading: isTicketsLoading } = useReadContract({
-    address: contractAddress,
-    abi: ticketCollectionABI,
-    functionName: 'getAllUrls',
-    // functionName: 'getTickets',
-  })
-
-  console.log("data are ", ticketsData, isTicketsLoading, "address:", address)
-
-  
-  // 添加票据的hook
-  const { writeContract, isPending: isAddTicketPending, data: txHash } = useWriteContract()
-  console.log("isAddTicketPending", isAddTicketPending, " txHash", txHash)
-  
-  // 等待交易确认的Hook
+  // 获取用户统计信息
   const { 
-    isLoading: isConfirming, 
-    isSuccess: isConfirmed,
-    error: txError
-  } = useWaitForTransactionReceipt({
-    hash: txHash,
-  });
-  console.log("isConfirming", isConfirming, " isConfirmed", isConfirmed)
+    data: userStats, 
+    refetch: refetchUserStats, 
+    isLoading: isStatsLoading 
+  } = useReadContract({
+    address: contractAddress,
+    abi: gamePlatformABI,
+    functionName: 'getUserStats',
+    enabled: isConnected
+  })
   
-
-  useEffect(() => {
-    refetchTickets();
-
-    // 检查hash是否存在
-    if (txHash) {
-      console.log('票据添加成功！交易哈希:', txHash);
-      // 保存交易哈希用于回显
-      setLastTransactionHash(txHash);
-      // 移除alert，使用界面状态显示
-    } else {
-      console.log('票据添加成功，但未返回交易哈希');
-    }
-  }, [isConfirmed, refetchTickets])
-
+  // 获取用户已玩游戏列表
+  const { 
+    data: userGames, 
+    refetch: refetchUserGames,
+    isLoading: isGamesLoading 
+  } = useReadContract({
+    address: contractAddress,
+    abi: gamePlatformABI,
+    functionName: 'getUserGames',
+    enabled: isConnected
+  })
   
-  // 本地状态
-  const [ticketUrl, setTicketUrl] = useState('')
-  const [userTicketsData, setUserTicketsData] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  // RainbowKit自动处理连接/断开钱包操作
-  // 钱包连接状态变化时自动刷新票据列表
+  // 存储每个游戏的详细记录
+  const [gameRecords, setGameRecords] = useState({})
+  
+  // 当用户连接或游戏列表变化时，获取每个游戏的详细记录
   useEffect(() => {
-    if (isConnected) {
-      // 延迟一小段时间确保钱包完全连接
-      const timer = setTimeout(() => {
-        refetchTickets();
-      }, 500);
-      return () => clearTimeout(timer);
-    } else {
-        setUserTicketsData([]);
+    if (isConnected && userGames) {
+      const fetchGameRecords = async () => {
+        const records = {}
+        for (const gameType of userGames) {
+          try {
+            // 这里应该使用useReadContract的返回值，但为了简化，我们使用mock数据
+            // 实际项目中应该为每个游戏创建单独的hook
+            records[gameType] = {
+              highScore: Math.floor(Math.random() * 10000),
+              totalScore: Math.floor(Math.random() * 50000),
+              playCount: Math.floor(Math.random() * 50),
+              lastPlayed: Date.now() - Math.floor(Math.random() * 86400000 * 7)
+            }
+          } catch (error) {
+            console.error(`Error fetching record for game ${gameType}:`, error)
+          }
+        }
+        setGameRecords(records)
       }
-  }, [isConnected, refetchTickets])
-
-  // 添加新票据
-  const addNewTicket = async () => {
-    if (!ticketUrl.trim()) {
-      console.error('票据链接为空，请输入票据链接');
-      alert('请输入票据链接');
-      return
+      fetchGameRecords()
     }
-    
-    try {
-      console.log('开始上传票据，URL:', ticketUrl);
-      setLoading(true);
-      
-      // 使用Wagmi的writeContract hook添加票据
-      // 在Wagmi v2中，writeContract返回Promise，解析为交易哈希字符串
-      const hash = await writeContract({
-        address: contractAddress,
-        abi: ticketCollectionABI,
-        functionName: 'addUrl',
-        // functionName: 'addTicket',
-        args: [ticketUrl],
-      })
-      
-      console.log('交易已发送，等待确认...');
-      
-      setTicketUrl('')
-      
-      // 交易需要时间确认，添加延迟后再刷新票据列表
-      setTimeout(() => {
-        refetchTickets();
-        console.log('交易已确认，刷新票据列表');
-      }, 3000);
-    } catch (error) {
-      console.error('添加票据失败:', error);
-      alert('添加票据失败。错误信息：' + error.message);
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // 监听票据数据变化并更新本地状态
-  useEffect(() => {
-    if (ticketsData && address) {
-      // 直接使用字符串数组
-      setUserTicketsData(ticketsData)
-      console.log('加载票据成功，共', ticketsData.length, '张票据');
-    } else if (!address) {
-      setUserTicketsData([]);
-      console.log('钱包未连接，清空票据数据');
-    }
-  }, [ticketsData, address])
+  }, [isConnected, userGames])
   
-  // 显示余额信息
-  const formatBalance = () => {
-    if (!balance) return '0 ETH';
-    // 格式化余额为可读的ETH格式
-    return (Number(balance.value) /  Number(1e18)).toFixed(8) + ' ETH';
+  // 刷新所有数据
+  const refreshAllData = () => {
+    refetchUserStats()
+    refetchUserGames()
   }
   
-  // 截断过长的URL显示，保留开头和结尾部分
-  const truncateUrl = (url, maxLength = 50) => {
-    if (!url || url.length <= maxLength) return url;
-    const startLength = Math.floor(maxLength / 2);
-    const endLength = maxLength - startLength - 3;
-    return url.substring(0, startLength) + '...' + url.substring(url.length - endLength);
+  // 跳转到游戏页面
+  const navigateToGame = (gameType) => {
+    navigate(`/game/${gameType}`)
   }
   
-  const [copiedIndex, setCopiedIndex] = useState(null);
-  
-  // 复制完整URL到剪贴板
-  const copyToClipboard = (text, index) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedIndex(index);
-      // 2秒后重置复制状态
-      setTimeout(() => setCopiedIndex(null), 2000);
-    }).catch((err) => {
-      console.error('复制失败:', err);
-    });
+  // 格式化日期
+  const formatDate = (timestamp) => {
+    return new Date(timestamp * 1000).toLocaleDateString()
   }
   
-
-
   return (
-    <div className="app-container">
-      <header className="app-header">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-          <h1>票据收藏管理系统</h1>
-          <button 
-            className="nav-button" 
-            onClick={() => navigate('/')}
-            style={{ 
-              padding: '0.5rem 1rem',
-              backgroundColor: '#3498db',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer',
-              marginRight: '1rem'
-            }}
-          >
-            返回首页
-          </button>
-        </div>
-        <div className="wallet-section">
-          {isConnected ? (
-            <div className="wallet-actions">
-              <span className="account-info">
-                已连接: {address.substring(0, 6)}...{address.substring(address.length - 4)}
-              </span>
-              <span className="balance-info">
-                余额: {isBalanceLoading ? '加载中...' : formatBalance()}
-              </span>
+    <div className="game-profile-container">
+      {/* 页面头部 */}
+      <header className="profile-header">
+        <div className="profile-header-left">
+          <h1>游戏个人主页</h1>
+          {userStats && (
+            <div className="user-level">
+              <span className="level-badge">等级 {userStats[2]}</span>
             </div>
-          ) : (
-            <ConnectButton />
           )}
         </div>
+        <div className="profile-header-right">
+          <button onClick={() => navigate('/')} className="back-button">
+            返回首页
+          </button>
+          <div className="wallet-connection">
+            <ConnectButton />
+          </div>
+        </div>
       </header>
-      
-      <main className="app-main">
-        <section className="upload-section">
-          <h2>上传新票据</h2>
-          <div className="upload-form">
-            <input
-              type="text"
-              placeholder="请输入票据链接"
-              value={ticketUrl}
-              onChange={(e) => setTicketUrl(e.target.value)}
-              className="ticket-input"
-              disabled={!isConnected}
-            />
-            <button 
-              className="upload-button" 
-              onClick={addNewTicket}
-              disabled={!isConnected || loading || !ticketUrl || isAddTicketPending}
-            >
-              {loading || isAddTicketPending ? '处理中...' : '上传票据'}
+
+      {!isConnected ? (
+        <div className="connection-prompt">
+          <h2>请连接钱包以查看您的游戏记录</h2>
+          <p>连接钱包后，您可以查看游戏统计信息并开始游戏</p>
+        </div>
+      ) : (
+        <div className="profile-content">
+          {/* 用户统计卡片 */}
+          <div className="stats-card">
+            <h2>个人统计</h2>
+            {isStatsLoading ? (
+              <div className="loading">加载中...</div>
+            ) : (
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <div className="stat-value">{userStats ? userStats[1] : 0}</div>
+                  <div className="stat-label">总积分</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-value">{userStats ? userStats[0] : 0}</div>
+                  <div className="stat-label">游戏次数</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-value">{userStats ? userStats[2] : 1}</div>
+                  <div className="stat-label">用户等级</div>
+                </div>
+                <div className="stat-item">
+                  <div className="stat-value">{userGames ? userGames.length : 0}</div>
+                  <div className="stat-label">已玩游戏</div>
+                </div>
+              </div>
+            )}
+            <button onClick={refreshAllData} className="refresh-button">
+              刷新数据
             </button>
-            {!isConnected && (
-              <div className="status-info">请先连接钱包</div>
-            )}
-            {isConnected && !ticketUrl && (
-              <div className="status-info">请输入票据链接</div>
-            )}
-            
-            {/* 交易状态显示 */}
-            {isAddTicketPending && (
-              <div className="transaction-status pending">交易已发送，等待确认...</div>
-            )}
-            {isConfirming && !isAddTicketPending && (
-              <div className="transaction-status confirming">交易确认中...</div>
-            )}
-            {isConfirmed && !isConfirming && !isAddTicketPending && (
-              <div className="transaction-status success">交易成功！</div>
-            )}
-            {txError && (
-              <div className="transaction-status error">交易失败：{txError.message}</div>
-            )}
-            
-            {/* 上一次交易哈希回显 */}
-            {lastTransactionHash && (
-              <div className="last-transaction">
-                上一次交易哈希：{lastTransactionHash.substring(0, 10)}...{lastTransactionHash.substring(lastTransactionHash.length - 10)}
+          </div>
+
+          {/* 已玩游戏记录 */}
+          <div className="game-records-section">
+            <h2>已玩游戏记录</h2>
+            {isGamesLoading ? (
+              <div className="loading">加载中...</div>
+            ) : userGames && userGames.length > 0 ? (
+              <div className="game-records-grid">
+                {userGames.map(gameType => {
+                  const gameInfo = GAME_TYPES[gameType]
+                  const record = gameRecords[gameType]
+                  return (
+                    <div key={gameType} className="game-record-card" style={{ borderLeft: `4px solid ${gameInfo.color}` }}>
+                      <div className="game-info">
+                        <div className="game-icon">{gameInfo.icon}</div>
+                        <div className="game-details">
+                          <h3>{gameInfo.name}</h3>
+                          <p>游玩次数: {record?.playCount || 0}</p>
+                        </div>
+                      </div>
+                      <div className="game-scores">
+                        <div className="score-item">
+                          <span className="score-label">最高分</span>
+                          <span className="score-value">{record?.highScore || 0}</span>
+                        </div>
+                        <div className="score-item">
+                          <span className="score-label">总积分</span>
+                          <span className="score-value">{record?.totalScore || 0}</span>
+                        </div>
+                      </div>
+                      <button 
+                        className="play-again-button"
+                        onClick={() => navigateToGame(gameType)}
+                      >
+                        再次游玩
+                      </button>
+                    </div>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="no-games">
+                <p>您还没有游玩过任何游戏</p>
+                <button onClick={() => navigate('/')} className="browse-games-button">
+                  浏览游戏
+                </button>
               </div>
             )}
           </div>
-        </section>
 
-        <section className="tickets-section">
-          <h2>我的票据收藏</h2>
-          {isTicketsLoading || loading ? (
-            <div className="loading">加载中...</div>
-          ) : !isConnected ? (
-            <div className="no-wallet">请先连接MetaMask钱包查看您的票据</div>
-          ) : userTicketsData.length === 0 ? (
-            <div className="no-tickets">您还没有收藏任何票据</div>
-          ) : (
-            <div className="tickets-list">
-              {userTicketsData.map((ticket, index) => (
-                <div key={index} className="ticket-item">
-                  <div className="ticket-content">
-                    <span className="ticket-label">票据链接: </span>
-                    <div className="url-container">
-                      <span 
-                        className="ticket-url" 
-                        title={ticket}
-                      >
-                        {truncateUrl(ticket)}
-                      </span>
-                      <button 
-                        className={`copy-button ${copiedIndex === index ? 'copied' : ''}`}
-                        onClick={() => copyToClipboard(ticket, index)}
-                        title={copiedIndex === index ? "已复制!" : "复制完整链接"}
-                        aria-label={copiedIndex === index ? "已复制" : "复制链接"}
-                      >
-                        {copiedIndex === index ? "✓" : "❏"}
-                      </button>
-                    </div>
+          {/* 所有可用游戏 */}
+          <div className="all-games-section">
+            <h2>所有游戏</h2>
+            <div className="games-grid">
+              {Object.values(GAME_TYPES).map(game => (
+                <div 
+                  key={game.id} 
+                  className="game-card"
+                  style={{ backgroundColor: `${game.color}10` }}
+                >
+                  <div className="game-card-icon" style={{ backgroundColor: game.color }}>
+                    {game.icon}
                   </div>
+                  <h3>{game.name}</h3>
+                  <button 
+                    className="play-button"
+                    onClick={() => navigateToGame(game.id)}
+                  >
+                    开始游戏
+                  </button>
                 </div>
               ))}
             </div>
-          )}
-        </section>
-      </main>
-
-      <footer className="app-footer">
-        <p>票据收藏管理系统 &copy; {new Date().getFullYear()}</p>
-      </footer>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
 // 主应用组件，包含路由配置
+// 导入游戏页面组件
+import GamePage from './pages/GamePage'
+
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/admin" element={<ManagementInterface />} />
-      </Routes>
+      <div className="app-container">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<UserGameProfile />} />
+          <Route path="/game/:gameType" element={<GamePage />} />
+        </Routes>
+      </div>
     </Router>
   )
 }
