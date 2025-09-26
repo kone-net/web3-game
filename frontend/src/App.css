@@ -1,0 +1,474 @@
+/* 全局样式重置和基础设置 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 应用容器 */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 头部样式 */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #e1e8ed;
+  margin-bottom: 30px;
+}
+
+.app-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.wallet-section {
+  margin: 20px 0;
+  text-align: center;
+}
+  
+.wallet-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+  
+.disconnect-button {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+  
+.disconnect-button:hover {
+  background-color: #ee5253;
+}
+  
+.account-info {
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+}
+
+.connect-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+}
+
+.connect-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.connect-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.account-info {
+  background-color: #ecf0f1;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: #2c3e50;
+}
+
+/* 主要内容区域 */
+.app-main {
+  flex: 1;
+}
+
+/* 上传区域 */
+.upload-section {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.upload-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .refresh-button {
+    background-color: #4a9eff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .refresh-button:hover:not(:disabled) {
+    background-color: #357abd;
+  }
+  
+  .refresh-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+/* 状态提示信息 */
+.status-info {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-info:first-of-type {
+  margin-top: 10px;
+}
+
+/* 不同状态的颜色 */
+.upload-form > .status-info:nth-child(4) {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.upload-form > .status-info:nth-child(5) {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.upload-form > .status-info:nth-child(6) {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.ticket-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.ticket-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.ticket-input:disabled {
+  background-color: #f8f9fa;
+  cursor: not-allowed;
+}
+
+.upload-button {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.upload-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+}
+
+.upload-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 票据列表区域 */
+.tickets-section {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tickets-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c3e50;
+}
+
+.tickets-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.ticket-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+  }
+
+  .ticket-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #667eea;
+  }
+  
+  .ticket-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .ticket-label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+  }
+  
+  .url-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .ticket-url {
+    flex: 1;
+    min-width: 0;
+    word-break: break-all;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    color: #343a40;
+  }
+  
+  .copy-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #495057;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+  
+  .copy-button:hover {
+    background-color: #f8f9fa;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+  }
+  
+  .copy-button:active {
+    transform: translateY(0);
+  }
+  
+  .copy-button.copied {
+    background-color: #89de9d;
+    color: white;
+    border-color: #aaecb9;
+  }
+  
+  .copy-button.copied:hover {
+    background-color: #bae8c4;
+    border-color: #b6dcbf;
+  }
+
+.ticket-id {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 16px;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+/* 加载和空状态 */
+.loading,
+.no-wallet,
+.no-tickets {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.loading {
+  color: #667eea;
+}
+
+/* 页脚样式 */
+.app-footer {
+  margin-top: auto;
+  padding: 20px 0;
+  text-align: center;
+  color: #7f8c8d;
+  border-top: 1px solid #e1e8ed;
+}
+
+/* RainbowKit 连接按钮样式 */
+.rainbowkit-connect-button {
+  background-color: #6366f1;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.rainbowkit-connect-button:hover {
+  background-color: #4f46e5;
+}
+
+.rainbowkit-connect-button:disabled {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .upload-form {
+    flex-direction: column;
+  }
+  
+  .ticket-input {
+    width: 100%;
+  }
+  
+  .upload-button {
+    width: 100%;
+  }
+  
+  .tickets-list {
+    grid-template-columns: 1fr;
+  }
+  
+  .app-container {
+    padding: 0 15px;
+  }
+}
+
+/* 交易状态显示样式 */
+.transaction-status {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.transaction-status.pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border-left: 4px solid #ffc107;
+}
+
+.transaction-status.confirming {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  border-left: 4px solid #2196f3;
+}
+
+.transaction-status.success {
+  background-color: #d4edda;
+  color: #75c187;
+  border-left: 4px solid #28a745;
+}
+
+.transaction-status.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-left: 4px solid #dc3545;
+}
+
+/* 上一次交易哈希回显样式 */
+.last-transaction {
+  margin-top: 12px;
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 13px;
+  color: #495057;
+  text-align: center;
+  word-break: break-all;
+  transition: all 0.3s ease;
+}
+
+.last-transaction:hover {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
