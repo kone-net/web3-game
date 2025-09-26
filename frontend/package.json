@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://kone-net.github.io/web3-game/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
