@@ -6,6 +6,7 @@ import './GamePage.css'
 // 导入游戏组件
 import Game2048 from '../games/Game2048'
 import FrogGame from '../games/FrogGame'
+import TankGame from '../games/TankGame'
 
 // 导入游戏平台合约ABI
 import { gamePlatformABI, contractAddress, GAME_TYPES } from '../App'
@@ -121,6 +122,18 @@ const GamePage = () => {
             onGameOver={handleGameOver}
             isGameOver={isGameOver}
           />
+        )
+      case 2: // 坦克大战
+        return (
+          <div className="tank-game-wrapper">
+            <TankGame 
+              gameId={parseInt(gameType)}
+              onScoreUpdate={setCurrentScore}
+              onGameOver={handleGameOver}
+              isGameOver={isGameOver}
+              onExit={() => navigate('/')}
+            />
+          </div>
         )
       default:
         return <div>游戏不存在</div>

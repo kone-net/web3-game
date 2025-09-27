@@ -1,132 +1,287 @@
-/* FrogGame.css */
+/* FrogGame.css - 按照2048游戏风格设计 */
 .frog-game {
   position: relative;
   width: 100%;
-  max-width: 650px;
+  max-width: 500px; /* 缩小尺寸保持与2048一致 */
   margin: 0 auto;
+  padding: 1rem;
   user-select: none;
+  transition: all 0.3s ease;
+  outline: none;
+  /* 防止触摸时页面滚动 */
+  touch-action: none;
+  overscroll-behavior: contain;
+}
+
+/* 游戏容器 - 支持深色模式 */
+.frog-game-container {
+  background: var(--gray-100);
+  border-radius: var(--radius-xl);
+  padding: 1rem;
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+body.dark .frog-game-container {
+  background: var(--gray-800);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* 游戏头部 */
+.frog-game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.frog-game-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #2e7d32;
+  margin: 0;
+  line-height: 1;
+  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.dark .frog-game-title {
+  background: linear-gradient(135deg, #66bb6a, #81c784);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* 游戏控制区域 */
 .frog-game-controls {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 15px;
-  background: linear-gradient(135deg, #2e8b57, #8fbc8f);
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  gap: 0.75rem;
 }
 
 .frog-game-scores {
   display: flex;
-  gap: 20px;
+  gap: 0.75rem;
 }
 
 .score-box {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 12px 24px;
-  border-radius: 8px;
+  background: #4caf50;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-lg);
   text-align: center;
-  min-width: 100px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-width: 70px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+body.dark .score-box {
+  background: #388e3c;
+}
+
+.score-box.score {
+  background: #4caf50;
+}
+
+.score-box.best {
+  background: #4caf50;
+}
+
+body.dark .score-box.score,
+body.dark .score-box.best {
+  background: #388e3c;
 }
 
 .score-label {
-  font-size: 14px;
-  color: #4a4a4a;
+  font-size: 0.75rem;
+  color: white;
   text-transform: uppercase;
-  font-weight: 600;
-  margin-bottom: 4px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.25rem;
 }
 
 .score-value {
-  font-size: 28px;
+  font-size: 1.25rem;
   font-weight: 700;
-  color: #2e7d32;
+  color: white;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.frog-game-actions {
+  display: flex;
+  gap: 0.75rem;
 }
 
 .frog-game-new-game {
-  background: #ff6b6b;
+  background: linear-gradient(135deg, #ff7043, #ff5722);
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(255, 112, 67, 0.3);
+}
+
+body.dark .frog-game-new-game {
+  background: linear-gradient(135deg, #d84315, #ff5722);
+  box-shadow: 0 2px 6px rgba(216, 67, 21, 0.4);
 }
 
 .frog-game-new-game:hover {
-  background: #ee5253;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 107, 107, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 112, 67, 0.4);
 }
 
-/* 画布容器 */
-.frog-game-canvas-container {
-  position: relative;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-.frog-game-canvas {
-  display: block;
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  border: 3px solid #2e8b57;
-  border-radius: 12px;
+.frog-game-new-game:active {
+  transform: translateY(0);
 }
 
 /* 游戏说明 */
 .frog-game-instructions {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 15px 20px;
-  border-radius: 10px;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+body.dark .frog-game-instructions {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+}
+
+/* 游戏网格 */
+.frog-game-grid {
+  position: relative;
+  width: 100%;
+  margin-bottom: 1rem;
+  overflow: visible;
+}
+
+/* 使用容器包裹网格，确保正确的宽高比 */
+.frog-game-board-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 6 / 5; /* 游戏画布比例 */
+  max-height: 400px;
+  margin: 0 auto;
+}
+
+/* 画布容器 */
+.frog-game-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  background: #87CEEB;
+  box-shadow: var(--shadow-md);
+  /* 确保游戏在不同缩放级别下的稳定性 */
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* 防止触摸时页面滚动 */
+  touch-action: none;
+}
+
+body.dark .frog-game-canvas {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* 游戏结束覆盖层 */
+.game-over-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(46, 125, 50, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  z-index: 100;
+  animation: fade-in 0.3s ease;
+}
+
+body.dark .game-over-overlay {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.game-over-message {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 1rem;
   text-align: center;
-  color: #4a4a4a;
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.game-over-final-score {
+  font-size: 1.125rem;
+  color: white;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
 }
 
 /* 移动设备控制按钮 */
 .frog-game-mobile-controls {
   display: none; /* 默认隐藏，在移动设备上显示 */
   position: relative;
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   margin: 0 auto;
 }
 
 .control-button {
   position: absolute;
-  background: rgba(46, 139, 87, 0.9);
+  background: linear-gradient(135deg, #4caf50, #66bb6a);
   color: white;
   border: none;
-  border-radius: 50%;
-  font-size: 32px;
+  border-radius: var(--radius-lg);
+  font-size: 1.5rem;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  user-select: none;
+}
+
+body.dark .control-button {
+  background: linear-gradient(135deg, #388e3c, #4caf50);
+  box-shadow: 0 4px 12px rgba(56, 142, 60, 0.4);
 }
 
 .control-button:hover {
-  background: rgba(46, 139, 87, 1);
-  transform: scale(1.1);
+  background: linear-gradient(135deg, #66bb6a, #81c784);
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
 }
 
 .control-button:active {
@@ -136,14 +291,14 @@
 .control-button.up {
   top: 10px;
   left: 50%;
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   transform: translateX(-50%);
 }
 
 .control-row {
   position: absolute;
-  top: 90px;
+  top: 70px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -153,32 +308,48 @@
 .control-button.left,
 .control-button.down,
 .control-button.right {
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .frog-game-controls {
+  .frog-game {
+    padding: 0.75rem;
+  }
+  
+  .frog-game-container {
+    padding: 0.75rem;
+  }
+  
+  .frog-game-header {
     flex-direction: column;
-    gap: 15px;
+    align-items: stretch;
+    text-align: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .frog-game-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .frog-game-controls {
+    justify-content: center;
   }
   
   .frog-game-scores {
-    width: 100%;
-    justify-content: space-around;
+    justify-content: center;
   }
   
-  .frog-game-new-game {
-    width: 100%;
-  }
-  
-  .score-value {
-    font-size: 24px;
+  .frog-game-grid {
+    max-height: 320px;
   }
   
   .frog-game-instructions {
-    font-size: 14px;
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -188,9 +359,20 @@
     display: block;
   }
   
-  .frog-game-canvas {
-    max-width: 100%;
-    height: auto;
+  .frog-game {
+    padding: 0.5rem;
+  }
+  
+  .frog-game-container {
+    padding: 0.5rem;
+  }
+  
+  .frog-game-title {
+    font-size: 1.5rem;
+  }
+  
+  .frog-game-grid {
+    max-height: 280px;
   }
 }
 
@@ -216,29 +398,4 @@
 .score-value.high-score {
   color: #ff9800;
   animation: pulse 0.5s ease-in-out 2;
-}
-
-/* 跳跃按钮的额外样式 */
-.jump-indicator {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 14px;
-  color: #ff6b6b;
-  font-weight: bold;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.control-button:active .jump-indicator {
-  opacity: 1;
-}
-
-/* 确保游戏在不同缩放级别下的稳定性 */
-.frog-game-canvas {
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
 }

@@ -1,441 +1,1403 @@
-/* HomePage.css */
-* {
-  box-sizing: border-box;
-  margin: 0;
+/* HomePage.css - 现代化的Web3游戏平台主页样式 */
+
+/* 与App.css保持一致的CSS变量定义 */
+:root {
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-light: #818cf8;
+  
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* 深色模式变量，与App.css保持一致 */
+body.dark {
+  --gray-50: #111827;
+  --gray-100: #1f2937;
+  --gray-200: #374151;
+  --gray-300: #4b5563;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #d1d5db;
+  --gray-700: #e5e7eb;
+  --gray-800: #f3f4f6;
+  --gray-900: #f9fafb;
+  
+  --text-primary: #f0f0f0;
+  --text-secondary: #d1d1d1;
+  --text-muted: #9ca3af;
+}
+
+/* === 基础样式重置与全局设置 === */
+.homepage {
   padding: 0;
-}
-
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  line-height: 1.6;
-  color: #333;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  background: var(--gray-50);
+  transition: background-color 0.3s ease;
+  /* 移除最大宽度限制，让页面扩展到100%宽度 */
+  width: 100%;
+  margin: 0;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+body.dark .homepage {
+  background: var(--gray-900);
 }
 
-/* 导航栏样式 */
-.navbar {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  padding: 15px 0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.navbar .container {
+/* === 深色模式切换按钮 === */
+.dark-mode-toggle {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  /* 白天模式：高对比度渐变背景，纯白文字，加粗字体和明显阴影 */
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: 3px solid #ffffff;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 12px 40px rgba(79, 70, 229, 0.4), 0 4px 16px rgba(0, 0, 0, 0.15);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 999;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(16px);
+  /* 避免文字阴影 */
+  text-shadow: none;
 }
 
-.logo {
-  font-size: 24px;
-  font-weight: 700;
-  color: #667eea;
+body.dark .dark-mode-toggle {
+  /* 深色模式：金黄色图标标识，明显边框，增强阴影层次感 */
+  background: linear-gradient(135deg, #1f2937, #374151);
+  border: 3px solid #fbbf24;
+  color: #fbbf24;
+  box-shadow: 0 12px 40px rgba(251, 191, 36, 0.3), 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.1);
 }
 
-.logo a {
-  text-decoration: none;
-  color: inherit;
+.dark-mode-toggle:hover {
+  /* 旋转动画提供悬停反馈 */
+  transform: scale(1.2) rotate(360deg);
+  box-shadow: 0 16px 50px rgba(79, 70, 229, 0.5), 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-.nav-links {
-  display: flex;
-  gap: 25px;
+body.dark .dark-mode-toggle:hover {
+  /* 增强阴影层次感以提高视觉吸引力 */
+  box-shadow: 0 16px 50px rgba(251, 191, 36, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.15);
+  transform: scale(1.2) rotate(-360deg);
 }
 
-.nav-links a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  font-size: 16px;
-  transition: color 0.3s ease;
+.dark-mode-toggle:active {
+  transform: scale(1.1);
 }
 
-.nav-links a:hover {
-  color: #667eea;
+.dark-mode-toggle:focus {
+  outline: none;
+  box-shadow: 0 16px 50px rgba(79, 70, 229, 0.5), 0 6px 20px rgba(0, 0, 0, 0.2), 0 0 0 4px rgba(79, 70, 229, 0.2);
 }
 
-/* 英雄区域样式 */
+body.dark .dark-mode-toggle:focus {
+  box-shadow: 0 16px 50px rgba(251, 191, 36, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(251, 191, 36, 0.2);
+}
+
+/* === 英雄区域样式 === */
 .hero {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 100px 0;
+  padding: 0;
   text-align: center;
-  border-radius: 0 0 50px 50px;
-  margin-bottom: 50px;
+  /* 去除圆角，让英雄区域占据全局 */
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  /* 让hero区域扩展到100%宽度并占据页面的三分之二高度 */
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-bottom: 6rem;
+  /* 设置为视口高度的三分之二 */
+  min-height: 66.67vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.hero h1 {
-  font-size: 48px;
-  margin-bottom: 20px;
-  font-weight: 800;
+body.dark .hero {
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
 }
 
-.hero p {
-  font-size: 20px;
-  margin-bottom: 30px;
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* 添加内边距确保内容不贴边，并调整为适合三分之二高度的内边距 */
+  padding: 6rem 2rem;
+  /* 确保内容在高区域中垂直居中 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 66.67vh;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 8vw, 6rem);
+  margin-bottom: 2rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff, #e2e8f0, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-subtitle {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  margin-bottom: 4rem;
+  opacity: 0.95;
+  line-height: 1.6;
+  font-weight: 500;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.cta-buttons {
+.hero-buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
-}
-
-.btn {
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .btn-primary {
-  background: white;
-  color: #667eea;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  color: #4f46e5;
+  padding: 1rem 2.5rem;
+  border-radius: var(--radius-full);
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.6s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 48px rgba(255, 255, 255, 0.4);
+  color: #3730a3;
 }
 
-.btn-secondary {
-  background: transparent;
-  color: white;
-  border: 2px solid white;
+.hero-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-2px);
+.floating-icon {
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.6;
+  animation: float 8s ease-in-out infinite;
 }
 
-/* 游戏列表样式 */
+.floating-icon:nth-child(1) {
+  top: 15%;
+  left: 8%;
+  animation-delay: 0s;
+}
+
+.floating-icon:nth-child(2) {
+  top: 25%;
+  right: 10%;
+  animation-delay: 2.5s;
+}
+
+.floating-icon:nth-child(3) {
+  bottom: 15%;
+  left: 15%;
+  animation-delay: 5s;
+}
+
+/* 添加更多浮动图标，充分利用三分之二的空间 */
+.floating-icon:nth-child(4) {
+  top: 10%;
+  right: 25%;
+  animation-delay: 1.5s;
+  font-size: 2.5rem;
+}
+
+.floating-icon:nth-child(5) {
+  bottom: 25%;
+  right: 15%;
+  animation-delay: 4s;
+  font-size: 2.5rem;
+}
+
+.floating-icon:nth-child(6) {
+  top: 40%;
+  left: 5%;
+  animation-delay: 6s;
+  font-size: 2rem;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-25px) rotate(5deg);
+  }
+  66% {
+    transform: translateY(-15px) rotate(-3deg);
+  }
+}
+
+/* === 游戏列表样式 === */
 .games-section {
-  padding: 50px 0;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  margin: 0 20px 50px;
+  padding: 6rem 2rem;
+  background: transparent;
+  margin-bottom: 4rem;
+  /* 确保内容居中 */
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.games-section h2 {
+.section-header {
   text-align: center;
-  font-size: 36px;
-  margin-bottom: 40px;
-  color: #333;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: clamp(2.25rem, 4vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 0.25rem;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: var(--radius-full);
+}
+
+.section-description {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
+body.dark .section-description {
+  color: var(--gray-300);
 }
 
 .games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .game-card {
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid transparent;
+  border-radius: var(--radius-2xl);
+  padding: 2.5rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 2048游戏卡片样式 */
+.game-card-2048 {
+  background: linear-gradient(135deg, #faf8ef, #eee4da);
+  color: #776e65;
+}
+
+body.dark .game-card-2048 {
+  background: linear-gradient(135deg, #2d2a2e, #453f4a);
+  /* 确保文字颜色与背景有足够对比度 */
+  color: #f0f0f0;
+}
+
+/* 青蛙游戏卡片样式 */
+.game-card-frog {
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #2e7d32;
+}
+
+body.dark .game-card-frog {
+  background: linear-gradient(135deg, #1b3d2f, #2a5c42);
+  /* 确保文字颜色与背景有足够对比度 */
+  color: #f0f0f0;
+}
+
+/* 坦克大战游戏卡片样式 */
+.game-card-tank {
+  background: linear-gradient(135deg, #fff1e6, #ffd7ba);
+  color: #d9480f;
+}
+
+body.dark .game-card-tank {
+  background: linear-gradient(135deg, #4a3a2a, #6b5a4a);
+  /* 确保文字颜色与背景有足够对比度 */
+  color: #f0f0f0;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  transform: scaleX(0);
+  transition: transform 0.4s ease;
+}
+
+.game-card:hover::before {
+  transform: scaleX(1);
 }
 
 .game-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  border-color: currentColor;
+  transform: translateY(-12px);
+  box-shadow: 0 20px 64px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .game-card:hover {
+  box-shadow: 0 20px 64px rgba(0, 0, 0, 0.3);
+}
+
+.game-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  /* 确保所有子元素基线对齐 */
+  line-height: 1;
 }
 
 .game-icon {
-  font-size: 48px;
-  margin-bottom: 20px;
-  text-align: center;
+  font-size: 3.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  /* 确保图标垂直居中对齐 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* 设置固定高度确保一致性 */
+  height: 3.5rem;
+  flex-shrink: 0;
 }
 
-.game-card h3 {
-  font-size: 28px;
-  margin-bottom: 15px;
-  text-align: center;
+.game-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.025em;
+  /* 移除可能导致文字不可见的background属性 */
+  color: inherit;
+  /* 确保标题文字垂直居中 */
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
 }
 
-.game-card p {
-  margin-bottom: 20px;
-  font-size: 16px;
-  text-align: center;
+.game-description {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  font-weight: 500;
+  color: inherit;
+  opacity: 0.9;
 }
 
 .game-features {
   list-style: none;
-  margin-bottom: 25px;
+  margin: 0 0 2.5rem 0;
+  padding: 0;
 }
 
-.game-features li {
-  margin-bottom: 10px;
-  padding-left: 25px;
-  position: relative;
-}
-
-.game-features li:before {
-  content: '✓';
-  position: absolute;
-  left: 0;
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.6;
   color: inherit;
-  font-weight: bold;
+  opacity: 0.9;
+}
+
+.feature-icon {
+  font-size: 1rem;
+  margin-top: 0.125rem;
+  color: var(--primary);
 }
 
 .play-button {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
   width: 100%;
-  padding: 12px;
-  text-align: center;
-  border-radius: 8px;
-  font-weight: 600;
+  padding: 1.25rem;
+  border-radius: var(--radius-xl);
+  font-weight: 800;
+  font-size: 1.125rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
-  transition: all 0.3s ease;
-  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 2048游戏按钮样式 */
+.play-button-2048 {
+  background: #776e65;
+  color: #ffffff;
+}
+
+body.dark .play-button-2048 {
+  background: #d8cdc0;
+  color: #111827;
+}
+
+/* 青蛙游戏按钮样式 */
+.play-button-frog {
+  background: #2e7d32;
+  color: #ffffff;
+}
+
+body.dark .play-button-frog {
+  background: #a5d6a7;
+  color: #111827;
+}
+
+.play-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.6s;
+}
+
+.play-button:hover::before {
+  left: 100%;
 }
 
 .play-button:hover {
-  transform: scale(1.05);
+  transform: scale(1.02) translateY(-2px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
-/* 关于平台样式 */
-.about {
-  padding: 50px 0;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 20px;
-  margin: 0 20px 50px;
+.play-icon {
+  transition: transform 0.3s ease;
+  font-size: 1.25rem;
 }
 
-.about h2 {
-  text-align: center;
-  font-size: 36px;
-  margin-bottom: 30px;
-  color: #333;
+.play-button:hover .play-icon {
+  transform: translateX(4px);
 }
 
-.about p {
-  text-align: center;
-  font-size: 18px;
-  margin-bottom: 40px;
-  max-width: 800px;
+/* === 特点区域样式 === */
+.features-section {
+  padding: 6rem 2rem;
+  margin-bottom: 4rem;
+  /* 确保内容居中 */
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  color: #555;
 }
 
-.features {
+.features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.feature {
+.feature-card {
+  background: var(--gray-100);
+  border-radius: var(--radius-2xl);
+  padding: 3rem 2rem;
   text-align: center;
-  padding: 25px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
 }
 
-.feature h3 {
-  font-size: 20px;
-  margin-bottom: 15px;
-  color: #667eea;
+body.dark .feature-card {
+  background: var(--gray-800);
+  border-color: rgba(255, 255, 255, 0.05);
 }
 
-.feature p {
-  font-size: 15px;
-  color: #666;
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 0;
 }
 
-/* 底部CTA样式 */
-.cta {
-  padding: 80px 0;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  color: white;
+.feature-card:hover::before {
+  opacity: 0.03;
+}
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+body.dark .feature-card:hover {
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+}
+
+.feature-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.feature-card-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.feature-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+.feature-card-description {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+body.dark .feature-card-description {
+  color: var(--gray-300);
+}
+
+/* === 关于平台部分样式 === */
+.about-section {
+  padding: 6rem 2rem;
+  margin-bottom: 4rem;
+  background: linear-gradient(135deg, var(--gray-50), var(--gray-100));
+  border-radius: var(--radius-2xl);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+body.dark .about-section {
+  background: linear-gradient(135deg, var(--gray-900), var(--gray-800));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 70%, rgba(99, 102, 241, 0.1), transparent 50%);
+  pointer-events: none;
+}
+
+body.dark .about-section::before {
+  background: radial-gradient(circle at 30% 70%, rgba(99, 102, 241, 0.05), transparent 50%);
+}
+
+.about-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.about-text {
   text-align: center;
-  border-radius: 20px;
-  margin: 0 20px 50px;
-}
-
-.cta h2 {
-  font-size: 36px;
-  margin-bottom: 20px;
-}
-
-.cta p {
-  font-size: 18px;
-  margin-bottom: 40px;
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 4rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  font-weight: 500;
 }
 
-.game-cta-buttons {
+body.dark .about-text {
+  color: var(--gray-300);
+}
+
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem;
+}
+
+.about-feature-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-2xl);
+  padding: 2.5rem;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.dark .about-feature-card {
+  background: rgba(55, 65, 81, 0.8);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.about-feature-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.15);
+}
+
+body.dark .about-feature-card:hover {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3);
+}
+
+.about-feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+.about-feature-title {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+}
+
+.about-feature-description {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.7;
+  font-weight: 500;
+}
+
+body.dark .about-feature-description {
+  color: var(--gray-300);
+}
+
+/* === CTA部分样式 === */
+.cta-section {
+  padding: 6rem 2rem;
+  margin-bottom: 4rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: var(--radius-2xl);
+  text-align: center;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  overflow: hidden;
+}
+
+body.dark .cta-section {
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
+}
+
+body.dark .cta-section {
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.1), transparent 50%);
+  pointer-events: none;
+}
+
+.cta-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.cta-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.025em;
+}
+
+.cta-description {
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 3rem;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  line-height: 1.6;
+}
+
+.cta-buttons {
   display: flex;
   flex-wrap: wrap;
+  gap: 1.5rem;
   justify-content: center;
-  gap: 20px;
 }
 
-.game-btn {
+.cta-game-button {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px 25px;
-  font-size: 18px;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 1.125rem;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.95) !important;
+  color: #4338ca !important;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.025em;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
 }
 
-.game-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+body.dark .cta-game-button {
+  background: rgba(55, 65, 81, 0.9) !important;
+  color: var(--text-primary) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-/* 页脚样式 */
-.footer {
-  background: #333;
-  color: white;
-  padding: 50px 0 20px;
+.cta-game-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s;
+}
+
+.cta-game-button:hover::before {
+  left: 100%;
+}
+
+.cta-game-button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  background: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.8);
+  color: #3730a3 !important;
+}
+
+.cta-game-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.cta-game-text {
+  font-weight: 800;
+}
+
+/* === 页脚样式 === */
+/* === 页脚样式 === */
+.site-footer {
+  background: linear-gradient(135deg, var(--gray-900), #0f172a);
+  color: var(--gray-300);
+  padding: 6rem 2rem 3rem;
+  margin-top: 6rem;
+  position: relative;
+  overflow: hidden;
+  /* 已经在首页实现100%宽度，无需额外修改 */
+  /* width: 100vw; */
+  /* margin-left: calc(-50vw + 50%); */
+}
+
+body.dark .site-footer {
+  /* 夜间模式下页脚使用统一的深色背景并添加浅色边框分隔 */
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1), transparent 50%);
+  pointer-events: none;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .footer-content {
   display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 4rem;
+  margin-bottom: 4rem;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-logo {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: white;
+  background: linear-gradient(135deg, #ffffff, #e2e8f0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.footer-tagline {
+  font-size: 1rem;
+  margin-bottom: 2rem;
+  color: var(--gray-400);
+  line-height: 1.6;
+}
+
+body.dark .footer-tagline {
+  color: var(--gray-300);
+}
+
+.footer-social {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gray-800), var(--gray-700));
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark .social-link {
+  background: linear-gradient(135deg, var(--gray-700), var(--gray-600));
+}
+
+.social-link:hover {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+}
+
+.social-icon {
+  font-size: 1.375rem;
+}
+
+.footer-links {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 40px;
-  margin-bottom: 40px;
+  gap: 3rem;
 }
 
-.footer-logo h3 {
-  font-size: 24px;
-  margin-bottom: 15px;
+.footer-links-title {
+  font-size: 1.25rem;
+  font-weight: 700;
   color: white;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.025em;
 }
 
-.footer-logo p {
-  color: #ccc;
-  font-size: 14px;
+body.dark .footer-links-title {
+  color: var(--gray-100);
 }
 
-.footer-links h4,
-.footer-contact h4 {
-  font-size: 18px;
-  margin-bottom: 20px;
-  color: white;
-}
-
-.footer-links ul {
+.footer-links-list {
   list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.footer-links li {
-  margin-bottom: 10px;
+.footer-links-list li {
+  margin-bottom: 1rem;
 }
 
-.footer-links a {
-  color: #ccc;
+.footer-link {
+  color: var(--gray-400);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
 }
 
-.footer-links a:hover {
-  color: white;
+body.dark .footer-link {
+  color: var(--gray-300);
 }
 
-.footer-contact p {
-  margin-bottom: 10px;
-  color: #ccc;
-  font-size: 14px;
+.footer-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  transition: width 0.3s ease;
+}
+
+.footer-link:hover {
+  color: var(--primary-light);
+  transform: translateX(4px);
+}
+
+.footer-link:hover::after {
+  width: 100%;
 }
 
 .footer-bottom {
-  text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid #555;
-  color: #ccc;
-  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* 响应式设计 */
+body.dark .footer-bottom {
+  /* 与主题保持一致，使用更明显的边框 */
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+.copyright {
+  font-size: 0.95rem;
+  color: var(--gray-500);
+  font-weight: 500;
+}
+
+body.dark .copyright {
+  color: var(--gray-400);
+}
+
+.footer-legal {
+  display: flex;
+  gap: 2rem;
+}
+
+.legal-link {
+  font-size: 0.95rem;
+  color: var(--gray-500);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+body.dark .legal-link {
+  color: var(--gray-400);
+}
+
+.legal-link:hover {
+  color: var(--gray-300);
+  transform: translateY(-2px);
+}
+
+/* === 响应式设计 === */
+@media (max-width: 1024px) {
+  .hero {
+    padding: 6rem 1.5rem;
+  }
+  
+  .games-section,
+  .features-section,
+  .about-section,
+  .cta-section {
+    padding: 4rem 1.5rem;
+  }
+  
+  .games-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+}
+
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 36px;
+  .dark-mode-toggle {
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.5rem;
+    /* 保持同样的高对比度设计 */
+    border-width: 2px;
   }
   
-  .hero p {
-    font-size: 18px;
+  .hero {
+    /* 移动设备上调整为适合的高度，保持三分之二的比例 */
+    min-height: 60vh;
+    margin-bottom: 3rem;
+    /* 移动设备上调整margin */
+    margin-left: calc(-50vw + 50%);
+    width: 100vw;
   }
   
-  .cta-buttons {
+  .hero-content {
+    padding: 3rem 1rem;
+    min-height: 60vh;
+  }
+  
+  .hero-title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+  
+  .hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    margin-bottom: 3rem;
+  }
+  
+  .hero-buttons {
     flex-direction: column;
     align-items: center;
   }
   
-  .btn {
+  .btn-primary {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
   }
   
-  .games-section h2,
-  .about h2,
-  .cta h2 {
-    font-size: 28px;
+  .games-section,
+  .features-section,
+  .about-section,
+  .cta-section {
+    padding: 3rem 1rem;
+    margin-bottom: 3rem;
   }
   
-  .game-cta-buttons {
+  .games-grid,
+  .features-grid,
+  .about-features {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .game-card,
+  .feature-card,
+  .about-feature-card {
+    padding: 2rem 1.5rem;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  
+  .footer-bottom {
     flex-direction: column;
-    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
   }
   
-  .game-btn {
-    width: 100%;
-    max-width: 300px;
-    justify-content: center;
+  .footer-legal {
+    gap: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .navbar .container {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .nav-links {
-    gap: 15px;
-  }
-  
   .hero {
-    padding: 60px 0;
+    min-height: 50vh;
   }
   
-  .hero h1 {
-    font-size: 28px;
+  .hero-content {
+    padding: 2rem 0.75rem;
+    min-height: 50vh;
   }
   
-  .game-card {
-    padding: 20px;
+  .btn-primary {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+  }
+  
+  .game-card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
   }
   
   .game-icon {
-    font-size: 36px;
+    font-size: 3rem;
   }
   
-  .game-card h3 {
-    font-size: 24px;
+  .cta-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .cta-game-button {
+    justify-content: center;
+  }
+  
+  .footer-social {
+    justify-content: center;
   }
 }
+
+/* === 动画效果 === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.6);
+  }
+}
+
+/* 为元素添加动画 */
+.hero-content {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.game-card:nth-child(1) {
+  animation: fadeInLeft 0.6s ease-out 0.1s both;
+}
+
+.game-card:nth-child(2) {
+  animation: fadeInRight 0.6s ease-out 0.2s both;
+}
+
+.feature-card:nth-child(1) {
+  animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+
+.feature-card:nth-child(2) {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.feature-card:nth-child(3) {
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+.about-feature-card:nth-child(1) {
+  animation: fadeInLeft 0.6s ease-out 0.1s both;
+}
+
+.about-feature-card:nth-child(2) {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+.about-feature-card:nth-child(3) {
+  animation: fadeInRight 0.6s ease-out 0.3s both;
+}
+
+/* 特殊效果 */
+.btn-primary:focus {
+  animation: glow 2s infinite;
+  outline: none;
+}
+
+.play-button:focus {
+  animation: pulse 1s infinite;
+  outline: none;
+}
+
+/* === 性能优化 === */
+* {
+  will-change: transform;
+}
+
+.game-card,
+.feature-card,
+.about-feature-card,
+.cta-game-button,
+.btn-primary {
+  will-change: transform, box-shadow;
+}
+
+/* 减少动画偏好设置 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

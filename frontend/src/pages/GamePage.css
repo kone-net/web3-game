@@ -1,4 +1,58 @@
-/* GamePage.css */
+/* GamePage.css - 游戏页面样式 */
+
+/* 全局CSS变量定义，与App.css保持一致 */
+:root {
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-light: #818cf8;
+  
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* 深色模式变量，与App.css保持一致 */
+body.dark {
+  --gray-50: #111827;
+  --gray-100: #1f2937;
+  --gray-200: #374151;
+  --gray-300: #4b5563;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #d1d5db;
+  --gray-700: #e5e7eb;
+  --gray-800: #f3f4f6;
+  --gray-900: #f9fafb;
+  
+  --text-primary: #f0f0f0;
+  --text-secondary: #d1d1d1;
+  --text-muted: #9ca3af;
+}
+
+/* 游戏页面容器 */
 .game-page-container {
   display: flex;
   flex-direction: column;
@@ -6,9 +60,12 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  background: var(--gray-50);
+  transition: background-color 0.3s ease;
+}
+
+body.dark .game-page-container {
+  background: var(--gray-900);
 }
 
 /* 游戏头部 */
@@ -18,7 +75,11 @@
   align-items: center;
   padding: 20px 0;
   margin-bottom: 20px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid var(--gray-200);
+}
+
+body.dark .game-header {
+  border-bottom-color: var(--gray-700);
 }
 
 .game-header-left {
@@ -31,7 +92,7 @@
   width: 48px;
   height: 48px;
   border: none;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--gray-100);
   border-radius: 50%;
   font-size: 24px;
   cursor: pointer;
@@ -41,10 +102,18 @@
   justify-content: center;
 }
 
+body.dark .home-button {
+  background: var(--gray-800);
+}
+
 .home-button:hover {
   transform: scale(1.1);
-  background: rgba(255, 255, 255, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: var(--gray-200);
+  box-shadow: var(--shadow-md);
+}
+
+body.dark .home-button:hover {
+  background: var(--gray-700);
 }
 
 .game-title {
@@ -60,7 +129,7 @@
 .game-title h1 {
   font-size: 28px;
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -71,17 +140,21 @@
 }
 
 .score-display {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--gray-100);
   padding: 12px 20px;
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+}
+
+body.dark .score-display {
+  background: var(--gray-800);
 }
 
 .score-label {
   display: block;
   font-size: 14px;
-  color: #7f8c8d;
+  color: var(--text-secondary);
   margin-bottom: 4px;
 }
 
@@ -89,7 +162,7 @@
   display: block;
   font-size: 28px;
   font-weight: 700;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .wallet-prompt {
@@ -117,16 +190,24 @@
   padding: 20px 0;
 }
 
-/* 游戏底部 */
+/* 游戏底部 - 与首页一致 */
 .game-footer {
-  padding: 20px 0;
+  width: 100%;
+  padding: 2rem 0;
   text-align: center;
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+}
+
+body.dark .game-footer {
+  background: var(--gray-900);
+  border-top-color: var(--gray-700);
 }
 
 /* 保存状态 */
 .save-status {
   padding: 12px 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   margin-bottom: 20px;
   font-weight: 500;
 }
@@ -148,12 +229,16 @@
 
 /* 游戏结束菜单 */
 .game-over-menu {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--gray-100);
   padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl);
   max-width: 400px;
   margin: 0 auto;
+}
+
+body.dark .game-over-menu {
+  background: var(--gray-800);
 }
 
 .game-over-menu h2 {
@@ -164,7 +249,7 @@
 
 .game-over-menu p {
   font-size: 24px;
-  color: #2c3e50;
+  color: var(--text-primary);
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -174,7 +259,7 @@
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
@@ -203,7 +288,7 @@
 .profile-button {
   padding: 12px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-lg);
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
@@ -258,4 +343,128 @@
   .profile-button {
     width: 100%;
   }
+}
+
+/* /* 坐克大战游戏包装样式 */
+.tank-game-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: var(--gray-900);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+}
+
+body.dark .tank-game-wrapper {
+  background: var(--gray-800);
+}
+
+/* 确保画布可见 */
+.tank-game-canvas {
+  display: block;
+  margin: 0 auto;
+  background: #000;
+  border: 2px solid var(--gray-600);
+  border-radius: var(--radius-md);
+}
+
+body.dark .tank-game-canvas {
+  border-color: var(--gray-500);
+}
+
+/* 游戏开始/结束界面样式 */
+.game-start-screen,
+.game-over-screen {
+  text-align: center;
+  padding: 2rem;
+  background: var(--gray-800);
+  border-radius: var(--radius-lg);
+  margin: 1rem auto;
+  max-width: 600px;
+}
+
+body.dark .game-start-screen,
+body.dark .game-over-screen {
+  background: var(--gray-700);
+}
+
+.game-start-screen h2,
+.game-over-screen h2 {
+  color: #4CAF50;
+  margin-bottom: 1rem;
+}
+
+.game-start-screen p,
+.game-over-screen p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+body.dark .game-start-screen p,
+body.dark .game-over-screen p {
+  color: var(--text-primary);
+}
+
+/* 按钮样式 */
+.start-button,
+.restart-button,
+.save-button,
+.exit-button {
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-button,
+.restart-button {
+  background: linear-gradient(135deg, #4CAF50, #66BB6A);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  text-shadow: none;
+}
+
+.start-button:hover,
+.restart-button:hover {
+  background: linear-gradient(135deg, #388E3C, #4CAF50);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+}
+
+.save-button {
+  background: linear-gradient(135deg, #2196F3, #42A5F5);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+  text-shadow: none;
+}
+
+.save-button:hover {
+  background: linear-gradient(135deg, #1976D2, #2196F3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(33, 150, 243, 0.4);
+}
+
+.exit-button {
+  background: linear-gradient(135deg, #F44336, #EF5350);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+  text-shadow: none;
+}
+
+.exit-button:hover {
+  background: linear-gradient(135deg, #D32F2F, #F44336);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(244, 67, 54, 0.4);
+}
+
+.game-over-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
 }

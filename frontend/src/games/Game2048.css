@@ -1,19 +1,23 @@
-/* Game2048.css - 现代2048游戏UI设计 */
+/* 游戏容器 - 调整大小以便完整显示 */
 .game-2048 {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 450px; /* 从600px减小到450px */
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1rem; /* 从1.5rem减小到1rem */
   user-select: none;
   transition: all 0.3s ease;
+  outline: none;
+  /* 防止触摸时页面滚动 */
+  touch-action: none;
+  overscroll-behavior: contain;
 }
 
 /* 游戏容器 - 支持深色模式 */
 .game-2048-container {
   background: var(--gray-100);
   border-radius: var(--radius-xl);
-  padding: 1.5rem;
+  padding: 1rem; /* 从1.5rem减小到1rem */
   box-shadow: var(--shadow-lg);
   transition: all 0.3s ease;
 }
@@ -28,13 +32,13 @@ body.dark .game-2048-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* 从1.5rem减小到1rem */
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem; /* 从1rem减小到0.75rem */
 }
 
 .game-2048-title {
-  font-size: 2.5rem;
+  font-size: 2rem; /* 从2.5rem减小到2rem */
   font-weight: 800;
   color: #776e65;
   margin: 0;
@@ -56,20 +60,20 @@ body.dark .game-2048-title {
 .game-2048-controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem; /* 从1rem减小到0.75rem */
 }
 
 .game-2048-scores {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem; /* 从1rem减小到0.75rem */
 }
 
 .score-box {
   background: #bbada0;
-  padding: 0.75rem 1.25rem;
+  padding: 0.5rem 1rem; /* 从0.75rem 1.25rem减小 */
   border-radius: var(--radius-lg);
   text-align: center;
-  min-width: 80px;
+  min-width: 70px; /* 从80px减小到70px */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
@@ -105,7 +109,7 @@ body.dark .score-label {
 }
 
 .score-value {
-  font-size: 1.5rem;
+  font-size: 1.25rem; /* 从1.5rem减小 */
   font-weight: 700;
   color: white;
   line-height: 1;
@@ -121,9 +125,9 @@ body.dark .score-label {
   background: linear-gradient(135deg, #8f7a66, #9f8b77);
   color: white;
   border: none;
-  padding: 0.75rem 1.25rem;
+  padding: 0.5rem 1rem; /* 从0.75rem 1.25rem减小 */
   border-radius: var(--radius-lg);
-  font-size: 0.875rem;
+  font-size: 0.75rem; /* 从0.875rem减小 */
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -148,13 +152,13 @@ body.dark .game-2048-new-game {
 
 /* 游戏说明 */
 .game-2048-instructions {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
+  margin-bottom: 1rem; /* 从1.5rem减小到1rem */
+  padding: 0.75rem; /* 从1rem减小到0.75rem */
   background: rgba(255, 255, 255, 0.5);
   border-radius: var(--radius-lg);
   color: var(--text-secondary);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  font-size: 0.8rem; /* 从0.875rem减小 */
+  line-height: 1.4; /* 从1.5减小 */
 }
 
 body.dark .game-2048-instructions {
@@ -166,7 +170,7 @@ body.dark .game-2048-instructions {
 .game-2048-grid {
   position: relative;
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem; /* 从1.5rem减小到1rem */
   overflow: visible;
 }
 
@@ -175,7 +179,7 @@ body.dark .game-2048-instructions {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  max-height: 600px;
+  max-height: 400px; /* 从600px减小到400px */
   margin: 0 auto;
 }
 
@@ -194,6 +198,8 @@ body.dark .game-2048-instructions {
   grid-template-rows: repeat(4, 1fr);
   gap: 2%;
   z-index: 1;
+  /* 防止触摸时页面滚动 */
+  touch-action: none;
 }
 
 body.dark .game-2048-board {
@@ -210,21 +216,22 @@ body.dark .grid-cell {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* 方块样式 */
+/* 方块样式 - 修复重叠问题 */
 .tile {
   position: absolute;
-  width: calc(25% - 2%);
-  height: calc(25% - 2%);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: clamp(1rem, 5vw, 2rem);
+  font-size: clamp(0.9rem, 3.5vw, 2rem); /* 调整字体大小适应小屏幕 */
   border-radius: var(--radius-md);
-  transition: transform 0.15s ease, opacity 0.15s ease, z-index 0.15s ease;
-  z-index: 2;
+  transition: all 0.15s ease;
+  z-index: 10;
   animation: tile-appear 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  /* 确保方块不会超出边界 */
+  box-sizing: border-box;
 }
 
 @keyframes tile-appear {
@@ -366,7 +373,7 @@ body.dark .tile.tile-super {
 /* 合并动画 */
 .tile-merged {
   animation: tile-merged 0.2s ease;
-  z-index: 3;
+  z-index: 15;
 }
 
 @keyframes tile-merged {
@@ -436,22 +443,26 @@ body.dark .game-over-final-score {
 /* 响应式设计 */
 @media (max-width: 768px) {
   .game-2048 {
-    padding: 1rem;
+    padding: 0.75rem; /* 从1rem减小 */
+    /* 确保在移动设备上不滚动 */
+    touch-action: none;
+    overscroll-behavior: contain;
   }
   
   .game-2048-container {
-    padding: 1rem;
+    padding: 0.75rem; /* 从1rem减小 */
   }
   
   .game-2048-header {
     flex-direction: column;
     align-items: stretch;
     text-align: center;
+    margin-bottom: 0.75rem; /* 减小间距 */
   }
   
   .game-2048-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.75rem; /* 从2rem减小 */
+    margin-bottom: 0.75rem;
   }
   
   .game-2048-controls {
@@ -463,7 +474,13 @@ body.dark .game-over-final-score {
   }
   
   .game-2048-grid {
-    max-height: 400px;
+    max-height: 320px; /* 从400px减小 */
+  }
+  
+  .game-2048-instructions {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -511,85 +528,73 @@ body.dark .game-over-final-score {
   width: 100%;
   height: 100%;
   border-radius: 6px;
-  background: #cdc1b4;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  font-size: calc(3vw + 16px); /* 响应式字体大小 */
+  font-size: inherit;
   transition: all 0.2s ease;
 }
 
-/* 不同数值方块的样式 */
-.tile-2 .tile-inner {
+/* 不同数值方块的样式 - 修复重叠问题 */
+.tile-2, .tile-2 .tile-inner {
   background: #eee4da;
   color: #776e65;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0), inset 0 0 0 1px rgba(255, 255, 255, 0);
 }
 
-.tile-4 .tile-inner {
+.tile-4, .tile-4 .tile-inner {
   background: #ede0c8;
   color: #776e65;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0), inset 0 0 0 1px rgba(255, 255, 255, 0);
 }
 
-.tile-8 .tile-inner {
+.tile-8, .tile-8 .tile-inner {
   background: #f2b179;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.2381), inset 0 0 0 1px rgba(255, 255, 255, 0.14286);
 }
 
-.tile-16 .tile-inner {
+.tile-16, .tile-16 .tile-inner {
   background: #f59563;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.3174), inset 0 0 0 1px rgba(255, 255, 255, 0.19048);
 }
 
-.tile-32 .tile-inner {
+.tile-32, .tile-32 .tile-inner {
   background: #f67c5f;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.3968), inset 0 0 0 1px rgba(255, 255, 255, 0.2381);
 }
 
-.tile-64 .tile-inner {
+.tile-64, .tile-64 .tile-inner {
   background: #f65e3b;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.4762), inset 0 0 0 1px rgba(255, 255, 255, 0.28571);
 }
 
-.tile-128 .tile-inner {
+.tile-128, .tile-128 .tile-inner {
   background: #edcf72;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.5556), inset 0 0 0 1px rgba(255, 255, 255, 0.33333);
-  font-size: calc(2.5vw + 12px);
+  font-size: clamp(0.7rem, 3vw, 1.6rem); /* 调整大数字方块字体 */
 }
 
-.tile-256 .tile-inner {
+.tile-256, .tile-256 .tile-inner {
   background: #edcc61;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.6349), inset 0 0 0 1px rgba(255, 255, 255, 0.38095);
-  font-size: calc(2.5vw + 12px);
+  font-size: clamp(0.7rem, 3vw, 1.6rem);
 }
 
-.tile-512 .tile-inner {
+.tile-512, .tile-512 .tile-inner {
   background: #edc850;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.7143), inset 0 0 0 1px rgba(255, 255, 255, 0.42857);
-  font-size: calc(2.5vw + 12px);
+  font-size: clamp(0.7rem, 3vw, 1.6rem);
 }
 
-.tile-1024 .tile-inner {
+.tile-1024, .tile-1024 .tile-inner {
   background: #edc53f;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.7937), inset 0 0 0 1px rgba(255, 255, 255, 0.47619);
-  font-size: calc(2vw + 8px);
+  font-size: clamp(0.6rem, 2.5vw, 1.4rem);
 }
 
-.tile-2048 .tile-inner {
+.tile-2048, .tile-2048 .tile-inner {
   background: #edc22e;
   color: white;
-  box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.873), inset 0 0 0 1px rgba(255, 255, 255, 0.52381);
-  font-size: calc(2vw + 8px);
+  font-size: clamp(0.6rem, 2.5vw, 1.4rem);
 }
 
 /* 游戏说明 */
@@ -656,28 +661,42 @@ body.dark .game-over-final-score {
 @media (max-width: 480px) {
   .game-2048 {
     max-width: 100%;
+    padding: 0.5rem; /* 进一步减小 */
+    /* 确保在小屏幕上不滚动 */
+    touch-action: none;
+    overscroll-behavior: contain;
   }
   
-  .tile-inner {
-    font-size: calc(4vw + 12px);
+  .game-2048-container {
+    padding: 0.5rem;
   }
   
-  .tile-128 .tile-inner,
-  .tile-256 .tile-inner,
-  .tile-512 .tile-inner {
-    font-size: calc(3.5vw + 8px);
+  .game-2048-title {
+    font-size: 1.5rem; /* 进一步减小 */
   }
   
-  .tile-1024 .tile-inner,
-  .tile-2048 .tile-inner {
-    font-size: calc(3vw + 4px);
+  .game-2048-grid {
+    max-height: 280px; /* 进一步减小 */
+  }
+  
+  .tile {
+    font-size: clamp(0.75rem, 3.5vw, 1.3rem); /* 调整小屏幕字体 */
+  }
+  
+  .tile-128, .tile-256, .tile-512 {
+    font-size: clamp(0.6rem, 3vw, 1.1rem);
+  }
+  
+  .tile-1024, .tile-2048 {
+    font-size: clamp(0.5rem, 2.5vw, 1rem);
   }
   
   .game-2048-message p {
-    font-size: 28px;
+    font-size: 24px; /* 从28px减小 */
   }
   
   .game-2048-instructions {
-    font-size: 14px;
+    font-size: 0.7rem; /* 从14px减小 */
+    padding: 0.5rem;
   }
 }

@@ -3,6 +3,7 @@ import { HashRouter as Router, Route, Routes, useNavigate } from 'react-router-d
 import { useAccount, useBalance, useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import './App.css'
+import './HomePage.css' // 导入HomePage样式以使用深色模式按钮样式
 import HomePage from './HomePage'
 
 // 游戏平台合约ABI
@@ -103,7 +104,8 @@ export const contractAddress = '0xbDEEA398F36cAAC38242db75Cb40d82540E2EC38'
 // 游戏类型枚举映射
 export const GAME_TYPES = {
   0: { id: 0, name: '2048', icon: '🎮', color: '#FF6B6B' },
-  1: { id: 1, name: '青蛙荷塘跳', icon: '🐸', color: '#4ECDC4' }
+  1: { id: 1, name: '青蛙荷塘跳', icon: '🐸', color: '#4ECDC4' },
+  2: { id: 2, name: '坦克大战', icon: '🚀', color: '#FFA500' }
 }
 
 function UserGameProfile() {
@@ -318,6 +320,56 @@ function UserGameProfile() {
           </div>
         </div>
       )}
+      
+      {/* 页脚 */}
+      <footer className="site-footer">
+        <div className="footer-container">
+          <div className="footer-content">
+            <div className="footer-brand">
+              <h3 className="footer-logo">Web3 Game Platform</h3>
+              <p className="footer-tagline">基于区块链的游戏平台</p>
+              <div className="footer-social">
+                <a href="#" className="social-link" aria-label="Twitter">
+                  <span className="social-icon">🐦</span>
+                </a>
+                <a href="#" className="social-link" aria-label="Discord">
+                  <span className="social-icon">💬</span>
+                </a>
+                <a href="#" className="social-link" aria-label="GitHub">
+                  <span className="social-icon">📂</span>
+                </a>
+              </div>
+            </div>
+            
+            <div className="footer-links">
+              <div className="footer-links-column">
+                <h4 className="footer-links-title">快速链接</h4>
+                <ul className="footer-links-list">
+                  <li><a href="/" className="footer-link">首页</a></li>
+                  <li><a href="/profile" className="footer-link">游戏记录</a></li>
+                  <li><a href="/faq" className="footer-link">常见问题</a></li>
+                </ul>
+              </div>
+              
+              <div className="footer-links-column">
+                <h4 className="footer-links-title">联系我们</h4>
+                <ul className="footer-links-list">
+                  <li><a href="mailto:contact@web3game.com" className="footer-link">contact@web3game.com</a></li>
+                  <li><a href="https://twitter.com/Web3GamePlatform" className="footer-link">@Web3GamePlatform</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+          <div className="footer-bottom">
+            <p className="copyright">&copy; 2025 Web3 Game Platform. 保留所有权利.</p>
+            <div className="footer-legal">
+              <a href="/privacy" className="legal-link">隐私政策</a>
+              <a href="/terms" className="legal-link">使用条款</a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }
@@ -326,10 +378,42 @@ function UserGameProfile() {
 // 导入游戏页面组件
 import GamePage from './pages/GamePage'
 
+// 全局深色模式管理
+function GlobalDarkModeToggle() {
+  const [darkMode, setDarkMode] = useState(false)
+  
+  // 检测系统深色模式偏好并初始化
+  useEffect(() => {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    setDarkMode(prefersDark)
+    if (prefersDark) {
+      document.body.classList.add('dark')
+    }
+  }, [])
+  
+  // 切换深色模式
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
+    document.body.classList.toggle('dark')
+  }
+  
+  return (
+    <button 
+      onClick={toggleDarkMode}
+      className="dark-mode-toggle"
+      aria-label={darkMode ? "切换到浅色模式" : "切换到深色模式"}
+    >
+      {darkMode ? '☀️' : '🌙'}
+    </button>
+  )
+}
+
 function App() {
   return (
     <Router>
       <div className="app-container">
+        {/* 全局深色模式切换按钮 */}
+        <GlobalDarkModeToggle />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<UserGameProfile />} />

@@ -1,0 +1,94 @@
+/* 坦克大战游戏样式 */
+.tank-game-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: #111;
+  border-radius: 1rem;
+  color: white;
+}
+
+.tank-game-canvas {
+  background: #000;
+  border: 2px solid #444;
+  border-radius: 0.5rem;
+}
+
+.game-start-screen,
+.game-over-screen {
+  text-align: center;
+  padding: 2rem;
+  background: #222;
+  border-radius: 0.5rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.game-start-screen h2,
+.game-over-screen h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #4CAF50;
+}
+
+.game-start-screen p,
+.game-over-screen p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  color: #ddd;
+}
+
+.start-button,
+.restart-button,
+.save-button,
+.exit-button {
+  padding: 0.75rem 1.5rem;
+  margin: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.start-button,
+.restart-button {
+  background: #4CAF50;
+  color: white;
+}
+
+.start-button:hover,
+.restart-button:hover {
+  background: #388E3C;
+  transform: translateY(-2px);
+}
+
+.save-button {
+  background: #2196F3;
+  color: white;
+}
+
+.save-button:hover {
+  background: #1976D2;
+  transform: translateY(-2px);
+}
+
+.exit-button {
+  background: #F44336;
+  color: white;
+}
+
+.exit-button:hover {
+  background: #D32F2F;
+  transform: translateY(-2px);
+}
+
+.game-over-buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}

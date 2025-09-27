@@ -253,9 +253,14 @@ const Game2048 = ({ onScoreUpdate, onGameOver, isGameOver: isParentGameOver }) =
     return a.length === b.length && a.every((val, index) => val === b[index])
   }
   
-  // 键盘事件处理
+  // 键盘事件处理 - 防止页面滚动
   const handleKeyDown = useCallback((e) => {
     if (isGameOver) return
+    
+    // 防止方向键导致页面滚动
+    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+      e.preventDefault()
+    }
     
     switch (e.key) {
       case 'ArrowLeft':
@@ -273,14 +278,18 @@ const Game2048 = ({ onScoreUpdate, onGameOver, isGameOver: isParentGameOver }) =
     }
   }, [grid, score, isGameOver])
   
-  // 触控滑动处理
+  // 触控滑动处理 - 防止页面滚动
   const handleTouchStart = useCallback((e) => {
+    // 防止触摸滑动导致页面滚动
+    e.preventDefault()
+    
     const touchStart = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY
     }
     
     const handleTouchMove = (e) => {
+      e.preventDefault()
       const touchEnd = {
         x: e.changedTouches[0].clientX,
         y: e.changedTouches[0].clientY
@@ -304,7 +313,7 @@ const Game2048 = ({ onScoreUpdate, onGameOver, isGameOver: isParentGameOver }) =
       document.removeEventListener('touchend', handleTouchMove)
     }
     
-    document.addEventListener('touchend', handleTouchMove)
+    document.addEventListener('touchend', handleTouchMove, { passive: false })
   }, [grid, score, isGameOver])
   
   // 组件挂载时初始化游戏
@@ -312,11 +321,21 @@ const Game2048 = ({ onScoreUpdate, onGameOver, isGameOver: isParentGameOver }) =
     initGame()
   }, [initGame])
   
-  // 添加键盘事件监听
+  // 添加键盘事件监听 - 防止页面滚动
   useEffect(() => {
+    // 防止键盘导致页面滚动
+    const preventDefaultForArrowKeys = (e) => {
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+        e.preventDefault()
+      }
+    }
+    
     document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('keydown', preventDefaultForArrowKeys)
+    
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('keydown', preventDefaultForArrowKeys)
     }
   }, [handleKeyDown])
   
@@ -338,19 +357,21 @@ const Game2048 = ({ onScoreUpdate, onGameOver, isGameOver: isParentGameOver }) =
     return value === 0 ? '' : value
   }
   
-  // 获取方块的位置样式 - 修复位置计算以确保完整显示
+  // 获取方块的位置样式 - 修复重叠问题
   const getTileStyle = (row, col) => {
-    // 使用百分比定位，确保在任何尺寸的容器中都正确显示
-    const offset = 2; // 格子间距百分比
-    const size = (100 - (offset * 5)) / 4; // 每个格子的大小
+    // 更精确的位置计算，防止重叠
+    const containerPadding = 2; // 容器内边距2%
+    const gap = 2; // 格子间距2%
+    const cellSize = (100 - containerPadding * 2 - gap * 3) / 4; // 计算实际格子大小
     
     return {
-      left: `${col * (size + offset)}%`,
-      top: `${row * (size + offset)}%`,
-      width: `${size}%`,
-      height: `${size}%`,
+      left: `${containerPadding + col * (cellSize + gap)}%`,
+      top: `${containerPadding + row * (cellSize + gap)}%`,
+      width: `${cellSize}%`,
+      height: `${cellSize}%`,
       position: 'absolute',
-      transition: 'transform 0.15s ease, opacity 0.15s ease'
+      transition: 'all 0.15s ease',
+      zIndex: 10
     }
   }
   
@@ -411,9 +432,7 @@ const Game2048 = ({ onScoreUpdate, onGameOver, isGameOver: isParentGameOver }) =
                   role="button"
                   aria-label={`数字${cell}方块`}
                 >
-                  <div className="tile-inner">
-                    {getTileValue(cell)}
-                  </div>
+                  {getTileValue(cell)}
                 </div>
               ))
             )}
