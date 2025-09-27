@@ -1,0 +1,38 @@
+{
+  "name": "Web3 游戏平台",
+  "short_name": "Web3 Games",
+  "description": "基于区块链技术的游戏集合，连接钱包畅玩经典游戏",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "games",
+    "entertainment",
+    "utilities"
+  ],
+  "lang": "zh-CN",
+  "scope": "/",
+  "screenshots": []
+}
