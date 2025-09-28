@@ -240,14 +240,14 @@ const HomePage = () => {
                 <ul className="footer-links-list">
                   <li><Link to="/" className="footer-link">首页</Link></li>
                   <li><Link to="/profile" className="footer-link">游戏记录</Link></li>
-                  <li><Link to="/faq" className="footer-link">常见问题</Link></li>
+                  {/* <li><Link to="/faq" className="footer-link">常见问题</Link></li> */}
                 </ul>
               </div>
               
               <div className="footer-links-column">
                 <h4 className="footer-links-title">联系我们</h4>
                 <ul className="footer-links-list">
-                  <li><a href="mailto:contact@web3game.com" className="footer-link">contact@web3game.com</a></li>
+                  <li><a href="mailto:contact@web3game.com" className="footer-link">kone_net@163.com</a></li>
                   <li><a href="https://twitter.com/Web3GamePlatform" className="footer-link">@Web3GamePlatform</a></li>
                 </ul>
               </div>
