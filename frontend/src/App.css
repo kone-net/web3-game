@@ -271,11 +271,6 @@ body.dark .app-header {
   padding: 20px;
 }
 
-.profile-header {
-  text-align: center;
-  margin-bottom: 40px;
-  color: white;
-}
 
 .profile-header h1 {
   font-size: 36px;
@@ -595,7 +590,7 @@ body.dark .game-card {
 /* 以下是合并自UserProfile.css的样式 */
 
 .game-profile-container {
-  padding: 2rem 0;
+  /* padding: 0; */
   min-height: calc(100vh - 80px);
   position: relative;
   overflow-x: hidden;
@@ -607,25 +602,19 @@ body.dark .game-card {
   transition: background-color 0.3s ease;
 }
 
-body.dark .game-profile-container {
-  background: var(--gray-900);
-}
-
 /* 页面头部 */
 .profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.5rem;
-  padding: 1.5rem;
   background: var(--gray-100);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
   /* 为头部添加最大宽度限制 */
-  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 2.5rem;
+  margin-bottom: 5rem;
+  height: 5rem;
 }
 
 body.dark {
@@ -646,10 +635,11 @@ body.dark .profile-header {
 }
 
 .profile-header-left h1 {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.5rem;
+  font-weight: 800;
   margin: 0;
-  color: var(--text-primary);
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .profile-header-right {
@@ -1339,25 +1329,22 @@ body.dark .legal-link {
 /* 临时占位符样式，如果需要可以在后续添加更多样式 */
 /* UserProfile.css - 与HomePage风格统一的用户个人主页样式 */
 
-.game-profile-container {
-  padding: 2rem 0;
-  min-height: calc(100vh - 80px);
-  position: relative;
-  overflow-x: hidden;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 /* 页面头部 */
 .profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2.5rem;
-  padding: 1.5rem;
-  background: var(--gray-100);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0;
+  box-shadow: var(--shadow-xl);
+  padding: 2rem;
+  /* 为头部添加最大宽度限制 */
+  /* max-width: 1200px; */
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5rem;
+  height: 9rem;
+  color: white;
 }
 
 body.dark {
@@ -1367,8 +1354,9 @@ body.dark {
 }
 
 body.dark .profile-header {
-  background: var(--gray-800);
-  border: 1px solid rgba(255, 255, 255, 0.1);  /* 添加边框增强区分度 */
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #8b5cf6 100%);
+  border: none;
+  box-shadow: 0 20px 40px rgba(67, 56, 202, 0.3);
 }
 
 .profile-header-left {
@@ -1812,8 +1800,11 @@ body.dark .game-card {
 .site-footer {
   background: var(--gray-900);
   color: var(--gray-300);
-  padding: 4rem 1rem 2rem;
-  margin-top: 4rem;
+  padding: 4rem 1rem 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 body.dark .site-footer {
