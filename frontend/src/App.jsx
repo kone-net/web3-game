@@ -413,7 +413,7 @@ function App() {
     <Router>
       <div className="app-container">
         {/* 全局深色模式切换按钮 */}
-        <GlobalDarkModeToggle />
+        {/* <GlobalDarkModeToggle /> */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<UserGameProfile />} />
