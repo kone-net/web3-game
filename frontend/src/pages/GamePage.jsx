@@ -19,6 +19,7 @@ const GamePage = () => {
   const [isGameOver, setIsGameOver] = useState(false)
   const [isSavingScore, setIsSavingScore] = useState(false)
   const [saveStatus, setSaveStatus] = useState('')
+  const [gameOverHandled, setGameOverHandled] = useState(false) // 防止重复处理游戏结束
   
   // 添加分数到区块链的hook
   const { writeContract, isPending: isAddScorePending, data: txHash } = useWriteContract()
@@ -50,6 +51,20 @@ const GamePage = () => {
     } else if (isConfirmed) {
       setIsSavingScore(false)
       setSaveStatus('分数保存成功！')
+      console.log('✅ 交易确认成功，分数已保存到区块链', {
+        txHash,
+        gameType,
+        score: currentScore,
+        timestamp: new Date().toISOString()
+      })
+      
+      // 通知父组件数据已更新，可能需要刷新
+      if (window.dispatchEvent) {
+        window.dispatchEvent(new CustomEvent('blockchainDataUpdated', {
+          detail: { gameType: parseInt(gameType), score: currentScore }
+        }))
+      }
+      
       // 3秒后清空状态
       setTimeout(() => {
         setSaveStatus('')
@@ -57,9 +72,9 @@ const GamePage = () => {
     } else if (txError) {
       setIsSavingScore(false)
       setSaveStatus('保存失败，请重试')
-      console.error('Transaction error:', txError)
+      console.error('❌ 交易失败:', txError)
     }
-  }, [isConfirming, isConfirmed, txError])
+  }, [isConfirming, isConfirmed, txError, txHash, gameType, currentScore])
   
   // 保存分数到区块链
   const saveScoreToBlockchain = (score) => {
@@ -68,7 +83,14 @@ const GamePage = () => {
       return
     }
     
+    if (isSavingScore) {
+      console.log('正在保存中，忽略重复请求')
+      return
+    }
+    console.log('保存分数到区块链 updateGameScore，分数:', score, ' gameType', gameType)
+    
     try {
+      setIsSavingScore(true)
       writeContract({
         address: contractAddress,
         abi: gamePlatformABI,
@@ -78,16 +100,24 @@ const GamePage = () => {
     } catch (error) {
       console.error('Error saving score:', error)
       setSaveStatus('保存失败，请重试')
+      setIsSavingScore(false)
     }
   }
   
   // 处理游戏结束
   const handleGameOver = (finalScore) => {
+    if (gameOverHandled) {
+      console.log('游戏结束已处理，忽略重复调用')
+      return
+    }
+    
+    console.log('处理游戏结束，分数:', finalScore)
+    setGameOverHandled(true)
     setIsGameOver(true)
     setCurrentScore(finalScore)
     
     // 自动保存分数到区块链
-    if (isConnected) {
+    if (isConnected && finalScore > 0) {
       saveScoreToBlockchain(finalScore)
     }
   }
@@ -97,6 +127,8 @@ const GamePage = () => {
     setIsGameOver(false)
     setCurrentScore(0)
     setSaveStatus('')
+    setGameOverHandled(false) // 重置游戏结束处理标志
+    setIsSavingScore(false)
   }
   
   // 返回个人主页
@@ -187,13 +219,15 @@ const GamePage = () => {
           <div className="game-over-menu">
             <h2>游戏结束！</h2>
             <p>最终得分: {currentScore}</p>
-            {!isConnected && (
+                        {isConnected ? (
+              <p>分数已自动保存到区块链</p>
+            ) : (
               <button 
                 className="save-score-button"
                 onClick={() => saveScoreToBlockchain(currentScore)}
                 disabled={isSavingScore}
               >
-                {isSavingScore ? '保存中...' : '保存分数'}
+                {isSavingScore ? '保存中...' : '连接钱包并保存分数'}
               </button>
             )}
             <div className="game-actions">

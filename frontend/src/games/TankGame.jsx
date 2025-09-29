@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useWriteContract } from 'wagmi';
-import { gamePlatformABI, contractAddress } from '../App';
 
 // 游戏常量
 const CANVAS_WIDTH = 800;
@@ -11,12 +9,12 @@ const TANK_SPEED = 3; // 降低坦克速度
 const BULLET_SPEED = 6; // 降低子弹速度
 const ENEMY_SPAWN_RATE = 180; // 降低敌人生成频率
 
-const TankGame = ({ gameId, onExit }) => {
+const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOver, onExit }) => {
   const canvasRef = useRef(null);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
-  const { writeContract } = useWriteContract();
+  const [gameOverHandled, setGameOverHandled] = useState(false); // 防止重复处理
   
   // 游戏状态
   const gameState = useRef({
@@ -31,6 +29,26 @@ const TankGame = ({ gameId, onExit }) => {
     keys: {},
     frameCount: 0
   });
+
+  // 更新分数并通知父组件
+  const updateScore = (newScore) => {
+    setScore(newScore);
+    if (onScoreUpdate) {
+      onScoreUpdate(newScore);
+    }
+  };
+  
+  // 处理游戏结束
+  const handleGameOver = () => {
+    if (gameOverHandled) return;
+    
+    setGameOverHandled(true);
+    setGameOver(true);
+    
+    if (onGameOver) {
+      onGameOver(score);
+    }
+  };
 
   // 初始化游戏
   useEffect(() => {
@@ -135,7 +153,8 @@ const TankGame = ({ gameId, onExit }) => {
       
       if (hitIndex !== -1) {
         state.enemies.splice(hitIndex, 1);
-        setScore(prev => prev + 100);
+        const newScore = score + 100;
+        updateScore(newScore);
         return false;
       }
       
@@ -161,7 +180,7 @@ const TankGame = ({ gameId, onExit }) => {
       
       // 检查敌人是否到达底部
       if (enemy.y >= CANVAS_HEIGHT) {
-        setGameOver(true);
+        handleGameOver();
       }
       
       // 检查敌人是否碰撞玩家
@@ -171,7 +190,7 @@ const TankGame = ({ gameId, onExit }) => {
         enemy.y < state.player.y + TANK_SIZE &&
         enemy.y + TANK_SIZE > state.player.y
       ) {
-        setGameOver(true);
+        handleGameOver();
       }
     });
   };
@@ -257,23 +276,6 @@ const TankGame = ({ gameId, onExit }) => {
     ctx.fillText(`分数: ${score}`, 20, 30);
   };
 
-  // 保存分数到区块链
-  const saveScore = async () => {
-    try {
-      await writeContract({
-        address: contractAddress,
-        abi: gamePlatformABI,
-        functionName: 'updateGameScore',
-        args: [gameId, score]
-      });
-      alert('分数已保存到区块链！');
-      onExit();
-    } catch (error) {
-      console.error('保存分数失败:', error);
-      alert('保存分数失败，请重试');
-    }
-  };
-
   // 开始游戏
   const startGame = () => {
     gameState.current = {
@@ -289,8 +291,10 @@ const TankGame = ({ gameId, onExit }) => {
       frameCount: 0
     };
     setScore(0);
+    updateScore(0); // 同步父组件分数
     setGameOver(false);
     setGameStarted(true);
+    setGameOverHandled(false); // 重置游戏结束处理标志
   };
 
   return (
@@ -311,9 +315,6 @@ const TankGame = ({ gameId, onExit }) => {
           <div className="game-over-buttons">
             <button onClick={startGame} className="restart-button">
               再玩一次
-            </button>
-            <button onClick={saveScore} className="save-button">
-              保存分数
             </button>
             <button onClick={onExit} className="exit-button">
               退出

@@ -13,8 +13,15 @@ npx hardhat ignition deploy ./ignition/modules/Lock.js
 
 ## 部署合约代码到ganache
 ```shell
-会使用到 hardhat.config.js里面的配置 和 scripts/deploy.js脚本
-npx hardhat run scripts/deploy.js --network ganache
+会使用到 hardhat.config.js里面的配置 和 scripts/deployGamePlatform.js脚本
+npx hardhat run scripts/deployGamePlatform.js --network ganache
+```
+
+## 部署合约到sepolia
+```shell
+npx hardhat run .\scripts\deployGamePlatform.js --network sepolia
+
+部署好地址：0xFf3fAde9AdF3c3f4014e85047F307412b13046E2
 ```
 
 ## 编译合约

@@ -6,7 +6,7 @@ import App from './App.jsx'
 import { WagmiProvider } from 'wagmi'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { RainbowKitProvider, getDefaultConfig } from '@rainbow-me/rainbowkit'
-import { mainnet, goerli, localhost, hardhat } from 'wagmi/chains'
+import { mainnet, goerli, sepolia, localhost, hardhat } from 'wagmi/chains'
 import { http } from 'wagmi'
 
 // Create a React Query client
@@ -16,10 +16,11 @@ const queryClient = new QueryClient()
 const rainbowConfig = getDefaultConfig({
   appName: 'Web3游戏平台',
   projectId: '12345678901234567890123456789012', // 开发环境临时ID
-  chains: [mainnet, goerli, localhost, hardhat],
+  chains: [mainnet, goerli, sepolia, localhost, hardhat],
   transports: {
     [mainnet.id]: http(),
     [goerli.id]: http(),
+    [sepolia.id]: http(),
     [localhost.id]: http('http://localhost:8545'),
     [hardhat.id]: http('http://localhost:8545'),
   },

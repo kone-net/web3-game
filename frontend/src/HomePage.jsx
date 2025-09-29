@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-
-// 导入GAME_TYPES常量和样式
-import { GAME_TYPES } from './App';
 import './HomePage.css';
 
 const HomePage = () => {

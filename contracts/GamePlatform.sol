@@ -82,13 +82,13 @@ contract GamePlatform {
     }
     
     // 获取用户游戏记录
-    function getUserGameRecord(GameType gameType) external view returns (
+    function getUserGameRecord(address user, GameType gameType) external view returns (
         uint256 highScore,
         uint256 totalScore,
         uint256 playCount,
         uint256 lastPlayed
     ) {
-        GameRecord storage record = _userGameRecords[msg.sender][gameType];
+        GameRecord storage record = _userGameRecords[user][gameType];
         return (
             record.highScore,
             record.totalScore,
@@ -98,12 +98,12 @@ contract GamePlatform {
     }
     
     // 获取用户统计信息
-    function getUserStats() external view returns (
+    function getUserStats(address user) external view returns (
         uint256 totalGamesPlayed,
         uint256 totalScore,
         uint256 level
     ) {
-        UserStats storage stats = _userStats[msg.sender];
+        UserStats storage stats = _userStats[user];
         return (
             stats.totalGamesPlayed,
             stats.totalScore,
@@ -112,8 +112,8 @@ contract GamePlatform {
     }
     
     // 获取用户已玩游戏列表
-    function getUserGames() external view returns (GameType[] memory) {
-        return _userGames[msg.sender];
+    function getUserGames(address user) external view returns (GameType[] memory) {
+        return _userGames[user];
     }
     
     // 获取指定用户的游戏记录（公开查询）
