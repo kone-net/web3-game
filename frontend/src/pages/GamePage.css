@@ -348,7 +348,7 @@ body.dark .game-over-menu {
 /* /* 坐克大战游戏包装样式 */
 .tank-game-wrapper {
   width: 100%;
-  max-width: 800px;
+  /* max-width: 800px; */
   margin: 0 auto;
   padding: 20px;
   background: var(--gray-900);

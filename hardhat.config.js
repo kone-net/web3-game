@@ -1,16 +1,13 @@
 require("@nomicfoundation/hardhat-toolbox");
+require('dotenv').config(); // 加载.env文件中的环境变量
 
 /** @type import('hardhat/config').HardhatUserConfig */
-require('@nomicfoundation/hardhat-toolbox');
-const SEPOLIA_RPC_URL = "https://sepolia.infura.io/v3/xx";  // 你也可以使用其他可靠的Sepolia RPC端点，可从节点提供商处获取
-const PRIVATE_KEY = "xx";  // 替换为你自己的以太坊钱包私钥，要妥善保管私钥
-
 module.exports = {
   solidity: "0.8.28",
   networks: {
     sepolia: {
-      url: SEPOLIA_RPC_URL,
-      accounts: [PRIVATE_KEY],
+      url: process.env.SEPOLIA_RPC_URL,
+      accounts: [process.env.PRIVATE_KEY],
       chainId: 11155111,  // Sepolia的链ID是11155111
     },
     ganache: {

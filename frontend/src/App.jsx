@@ -19,9 +19,9 @@ export const gamePlatformABI =  [
         },
         {
           "indexed": false,
-          "internalType": "enum GamePlatform.GameType",
+          "internalType": "uint256",
           "name": "gameType",
-          "type": "uint8"
+          "type": "uint256"
         },
         {
           "indexed": false,
@@ -66,9 +66,9 @@ export const gamePlatformABI =  [
           "type": "address"
         },
         {
-          "internalType": "enum GamePlatform.GameType",
+          "internalType": "uint256",
           "name": "gameType",
-          "type": "uint8"
+          "type": "uint256"
         }
       ],
       "name": "getPublicGameRecord",
@@ -100,9 +100,9 @@ export const gamePlatformABI =  [
           "type": "address"
         },
         {
-          "internalType": "enum GamePlatform.GameType",
+          "internalType": "uint256",
           "name": "gameType",
-          "type": "uint8"
+          "type": "uint256"
         }
       ],
       "name": "getUserGameRecord",
@@ -142,9 +142,9 @@ export const gamePlatformABI =  [
       "name": "getUserGames",
       "outputs": [
         {
-          "internalType": "enum GamePlatform.GameType[]",
+          "internalType": "uint256[]",
           "name": "",
-          "type": "uint8[]"
+          "type": "uint256[]"
         }
       ],
       "stateMutability": "view",
@@ -182,9 +182,9 @@ export const gamePlatformABI =  [
     {
       "inputs": [
         {
-          "internalType": "enum GamePlatform.GameType",
+          "internalType": "uint256",
           "name": "gameType",
-          "type": "uint8"
+          "type": "uint256"
         },
         {
           "internalType": "uint256",
@@ -199,8 +199,8 @@ export const gamePlatformABI =  [
     }
   ]
 
-// 合约地址 - Sepolia测试网
-export const contractAddress = '0xc127E73B9016D838af9BBb353B4518Cced3B96D2'
+// 合约地址
+export const contractAddress = '0x8A8658Af8777109448Ce496795631D6CF9FbcA53'
 
 // 游戏类型枚举映射
 export const GAME_TYPES = {
@@ -284,6 +284,9 @@ function UserGameProfile() {
   const game0Record = useGameRecord(0, userGames?.includes(0))
   const game1Record = useGameRecord(1, userGames?.includes(1))
   const game2Record = useGameRecord(2, userGames?.includes(2))
+  console.log('game0Record:', game0Record.data)
+  console.log('game1Record:', game1Record.data)
+  console.log('game2Record:', game2Record.data)
 
   
   // 当用户连接或游戏列表变化时，获取每个游戏的详细记录
@@ -293,7 +296,7 @@ function UserGameProfile() {
       const records = {}
       
       // 处理游戏0的记录
-      if (userGames.includes(0) && game0Record.data) {
+      if (game0Record.data) {
         records[0] = {
           highScore: Number(game0Record.data[0]),
           totalScore: Number(game0Record.data[1]),
@@ -303,7 +306,7 @@ function UserGameProfile() {
       }
       
       // 处理游戏1的记录
-      if (userGames.includes(1) && game1Record.data) {
+      if (game1Record.data) {
         records[1] = {
           highScore: Number(game1Record.data[0]),
           totalScore: Number(game1Record.data[1]),
@@ -313,7 +316,7 @@ function UserGameProfile() {
       }
       
       // 处理游戏2的记录
-      if (userGames.includes(2) && game2Record.data) {
+      if (game2Record.data) {
         records[2] = {
           highScore: Number(game2Record.data[0]),
           totalScore: Number(game2Record.data[1]),

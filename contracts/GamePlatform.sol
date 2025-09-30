@@ -2,12 +2,6 @@
 pragma solidity ^0.8.0;
 
 contract GamePlatform {
-    // 游戏ID枚举
-    enum GameType {
-        Game2048,
-        FrogGame
-    }
-    
     // 游戏记录结构体
     struct GameRecord {
         uint256 highScore;   // 游戏最高分
@@ -24,21 +18,21 @@ contract GamePlatform {
     }
     
     // 映射：用户地址 => 游戏类型 => 游戏记录
-    mapping(address => mapping(GameType => GameRecord)) private _userGameRecords;
+    mapping(address => mapping(uint256 => GameRecord)) private _userGameRecords;
     
     // 映射：用户地址 => 用户统计
     mapping(address => UserStats) private _userStats;
     
     // 映射：用户地址 => 已玩游戏列表
-    mapping(address => mapping(GameType => bool)) private _playedGames;
+    mapping(address => mapping(uint256 => bool)) private _playedGames;
     
     // 已玩游戏数组（用于高效查询）
-    mapping(address => GameType[]) private _userGames;
+    mapping(address => uint256[]) private _userGames;
     
     // 事件：记录游戏成绩更新
     event GameScoreUpdated(
         address indexed user,
-        GameType gameType,
+        uint256 gameType,
         uint256 score,
         bool isNewHighScore
     );
@@ -47,7 +41,7 @@ contract GamePlatform {
     event UserLevelUp(address indexed user, uint256 newLevel);
     
     // 更新游戏成绩
-    function updateGameScore(GameType gameType, uint256 score) external {
+    function updateGameScore(uint256 gameType, uint256 score) external {
         address user = msg.sender;
         bool isNewHighScore = false;
         
@@ -82,7 +76,7 @@ contract GamePlatform {
     }
     
     // 获取用户游戏记录
-    function getUserGameRecord(address user, GameType gameType) external view returns (
+    function getUserGameRecord(address user, uint256 gameType) external view returns (
         uint256 highScore,
         uint256 totalScore,
         uint256 playCount,
@@ -112,12 +106,12 @@ contract GamePlatform {
     }
     
     // 获取用户已玩游戏列表
-    function getUserGames(address user) external view returns (GameType[] memory) {
+    function getUserGames(address user) external view returns (uint256[] memory) {
         return _userGames[user];
     }
     
     // 获取指定用户的游戏记录（公开查询）
-    function getPublicGameRecord(address user, GameType gameType) external view returns (
+    function getPublicGameRecord(address user, uint256 gameType) external view returns (
         uint256 highScore,
         uint256 totalScore,
         uint256 playCount

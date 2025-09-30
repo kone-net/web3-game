@@ -12,9 +12,12 @@ const ENEMY_SPAWN_RATE = 180; // 降低敌人生成频率
 const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOver, onExit }) => {
   const canvasRef = useRef(null);
   const [score, setScore] = useState(0);
+  const scoreRef = useRef(0); // 使用ref保存最新分数值
+  console.log('TankGame组件初始化，初始分数:', score);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameOverHandled, setGameOverHandled] = useState(false); // 防止重复处理
+  const [paused, setPaused] = useState(false); // 游戏暂停状态
   
   // 游戏状态
   const gameState = useRef({
@@ -31,11 +34,17 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
   });
 
   // 更新分数并通知父组件
-  const updateScore = (newScore) => {
-    setScore(newScore);
-    if (onScoreUpdate) {
-      onScoreUpdate(newScore);
-    }
+  const updateScore = (points) => {
+    console.log('updateScore调用，增加分数:', points);
+    setScore(prevScore => {
+      const newScore = prevScore + points;
+      scoreRef.current = newScore; // 更新ref中的最新分数
+      console.log('updateScore更新后总分:', newScore);
+      if (onScoreUpdate) {
+        onScoreUpdate(newScore);
+      }
+      return newScore;
+    });
   };
   
   // 处理游戏结束
@@ -45,8 +54,12 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
     setGameOverHandled(true);
     setGameOver(true);
     
+    // 游戏结束时，让父组件(GamePage)处理分数保存到区块链
+    const finalScore = scoreRef.current; // 使用ref中的最新分数
+    console.log('TankGame游戏结束，最终分数:', finalScore);
     if (onGameOver) {
-      onGameOver(score);
+      console.log('坦克游戏结束，调用onGameOver保存分数:', finalScore);
+      onGameOver(finalScore);
     }
   };
 
@@ -64,21 +77,65 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
     
     // 键盘事件监听
     const handleKeyDown = (e) => {
+      // 阻止方向键和空格的默认行为（页面滚动）
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'p'].includes(e.key)) {
+        e.preventDefault();
+      }
+      
+      // 处理暂停键
+      if (e.key === 'p' && gameStarted && !gameOver) {
+        setPaused(prev => !prev);
+        return;
+      }
+      
       gameState.current.keys[e.key] = true;
       
       // 空格键发射子弹
-      if (e.key === ' ' && gameState.current.player.cooldown === 0) {
+      if (e.key === ' ' && gameState.current.player.cooldown === 0 && !paused) {
+        let bulletX, bulletY;
+        const direction = gameState.current.player.direction;
+        const player = gameState.current.player;
+        
+        // 根据方向从炮管位置发射子弹
+        switch (direction) {
+          case 'up':
+            bulletX = player.x + TANK_SIZE / 2 - BULLET_SIZE / 2;
+            bulletY = player.y - BULLET_SIZE;
+            break;
+          case 'down':
+            bulletX = player.x + TANK_SIZE / 2 - BULLET_SIZE / 2;
+            bulletY = player.y + TANK_SIZE;
+            break;
+          case 'left':
+            bulletX = player.x - BULLET_SIZE;
+            bulletY = player.y + TANK_SIZE / 2 - BULLET_SIZE / 2;
+            break;
+          case 'right':
+            bulletX = player.x + TANK_SIZE;
+            bulletY = player.y + TANK_SIZE / 2 - BULLET_SIZE / 2;
+            break;
+          default:
+            // 默认从中心发射
+            bulletX = player.x + TANK_SIZE / 2 - BULLET_SIZE / 2;
+            bulletY = player.y + TANK_SIZE / 2 - BULLET_SIZE / 2;
+        }
+        
         const bullet = {
-          x: gameState.current.player.x + TANK_SIZE / 2 - BULLET_SIZE / 2,
-          y: gameState.current.player.y + TANK_SIZE / 2 - BULLET_SIZE / 2,
-          direction: gameState.current.player.direction
+          x: bulletX,
+          y: bulletY,
+          direction: direction
         };
+        console.log('发射子弹:', bullet);
         gameState.current.player.bullets.push(bullet);
         gameState.current.player.cooldown = 20;
       }
     };
     
     const handleKeyUp = (e) => {
+      // 阻止方向键的默认行为（页面滚动）
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+      }
       gameState.current.keys[e.key] = false;
     };
     
@@ -88,7 +145,11 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
     // 游戏循环
     let animationFrameId;
     const gameLoop = () => {
-      updateGame();
+      // 只有在游戏未暂停时才更新游戏状态
+      if (!paused) {
+        updateGame();
+      }
+      // 无论是否暂停都绘制游戏
       drawGame(ctx);
       animationFrameId = requestAnimationFrame(gameLoop);
     };
@@ -102,97 +163,120 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
       window.removeEventListener('keyup', handleKeyUp);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [gameStarted, gameOver]);
+  }, [gameStarted, gameOver, paused]);
 
   // 更新游戏状态
   const updateGame = () => {
     const state = gameState.current;
-    state.frameCount++;
-    
-    // 移动玩家坦克
-    if (state.keys.ArrowUp) {
-      state.player.y = Math.max(0, state.player.y - TANK_SPEED);
-      state.player.direction = 'up';
-    }
-    if (state.keys.ArrowDown) {
-      state.player.y = Math.min(CANVAS_HEIGHT - TANK_SIZE, state.player.y + TANK_SPEED);
-      state.player.direction = 'down';
-    }
-    if (state.keys.ArrowLeft) {
-      state.player.x = Math.max(0, state.player.x - TANK_SPEED);
-      state.player.direction = 'left';
-    }
-    if (state.keys.ArrowRight) {
-      state.player.x = Math.min(CANVAS_WIDTH - TANK_SIZE, state.player.x + TANK_SPEED);
-      state.player.direction = 'right';
+    // 只在游戏未暂停时增加帧数
+    if (!paused) {
+      state.frameCount++;
     }
     
-    // 冷却时间
-    if (state.player.cooldown > 0) {
+    // 移动玩家坦克（仅在游戏未暂停时）
+    if (!paused) {
+      if (state.keys.ArrowUp) {
+        state.player.y = Math.max(0, state.player.y - TANK_SPEED);
+        state.player.direction = 'up';
+      }
+      if (state.keys.ArrowDown) {
+        state.player.y = Math.min(CANVAS_HEIGHT - TANK_SIZE, state.player.y + TANK_SPEED);
+        state.player.direction = 'down';
+      }
+      if (state.keys.ArrowLeft) {
+        state.player.x = Math.max(0, state.player.x - TANK_SPEED);
+        state.player.direction = 'left';
+      }
+      if (state.keys.ArrowRight) {
+        state.player.x = Math.min(CANVAS_WIDTH - TANK_SIZE, state.player.x + TANK_SPEED);
+        state.player.direction = 'right';
+      }
+    }
+    
+    // 冷却时间（仅在游戏未暂停时减少）
+    if (!paused && state.player.cooldown > 0) {
       state.player.cooldown--;
     }
     
-    // 移动子弹
-    state.player.bullets = state.player.bullets.filter(bullet => {
-      switch (bullet.direction) {
-        case 'up': bullet.y -= BULLET_SPEED; break;
-        case 'down': bullet.y += BULLET_SPEED; break;
-        case 'left': bullet.x -= BULLET_SPEED; break;
-        case 'right': bullet.x += BULLET_SPEED; break;
-      }
-      
-      // 检查子弹是否击中敌人
-      const hitIndex = state.enemies.findIndex(enemy => {
+    // 移动子弹（仅在游戏未暂停时执行）
+    if (!paused) {
+      state.player.bullets = state.player.bullets.filter(bullet => {
+        // 根据方向更新子弹位置
+        switch (bullet.direction) {
+          case 'up':
+            bullet.y -= BULLET_SPEED;
+            break;
+          case 'down':
+            bullet.y += BULLET_SPEED;
+            break;
+          case 'left':
+            bullet.x -= BULLET_SPEED;
+            break;
+          case 'right':
+            bullet.x += BULLET_SPEED;
+            break;
+        }
+        
+        // 检查子弹是否击中敌人
+        const hitIndex = state.enemies.findIndex(enemy => {
+          const collision = (
+            bullet.x < enemy.x + TANK_SIZE &&
+            bullet.x + BULLET_SIZE > enemy.x &&
+            bullet.y < enemy.y + TANK_SIZE &&
+            bullet.y + BULLET_SIZE > enemy.y
+          );
+          if (collision) {
+            console.log('检测到碰撞！子弹位置:', bullet, '敌人位置:', enemy);
+          }
+          return collision;
+        });
+        
+        if (hitIndex !== -1) {
+          console.log('敌人被击中！当前分数:', score, '击中索引:', hitIndex);
+          state.enemies.splice(hitIndex, 1);
+          // 调用updateScore函数，传入增加的分数
+          updateScore(100);
+          return false;
+        }
+        
+        // 检查子弹是否超出边界
         return (
-          bullet.x < enemy.x + TANK_SIZE &&
-          bullet.x + BULLET_SIZE > enemy.x &&
-          bullet.y < enemy.y + TANK_SIZE &&
-          bullet.y + BULLET_SIZE > enemy.y
+          bullet.x >= 0 && bullet.x <= CANVAS_WIDTH &&
+          bullet.y >= 0 && bullet.y <= CANVAS_HEIGHT
         );
       });
       
-      if (hitIndex !== -1) {
-        state.enemies.splice(hitIndex, 1);
-        const newScore = score + 100;
-        updateScore(newScore);
-        return false;
+      // 生成敌人
+      if (state.frameCount % ENEMY_SPAWN_RATE === 0) {
+        state.enemies.push({
+          x: Math.floor(Math.random() * (CANVAS_WIDTH - TANK_SIZE)),
+          y: 0,
+          speed: 0.3 + Math.random() * 1 // 降低敌人速度，从1-3降低到0.5-1.5
+        });
       }
-      
-      // 检查子弹是否超出边界
-      return (
-        bullet.x >= 0 && bullet.x <= CANVAS_WIDTH &&
-        bullet.y >= 0 && bullet.y <= CANVAS_HEIGHT
-      );
-    });
-    
-    // 生成敌人
-    if (state.frameCount % ENEMY_SPAWN_RATE === 0) {
-      state.enemies.push({
-        x: Math.floor(Math.random() * (CANVAS_WIDTH - TANK_SIZE)),
-        y: 0,
-        speed: 1 + Math.random() * 2
-      });
     }
     
-    // 移动敌人
-    state.enemies.forEach(enemy => {
-      enemy.y += enemy.speed;
-      
-      // 检查敌人是否到达底部
-      if (enemy.y >= CANVAS_HEIGHT) {
-        handleGameOver();
-      }
-      
-      // 检查敌人是否碰撞玩家
-      if (
-        enemy.x < state.player.x + TANK_SIZE &&
-        enemy.x + TANK_SIZE > state.player.x &&
-        enemy.y < state.player.y + TANK_SIZE &&
-        enemy.y + TANK_SIZE > state.player.y
-      ) {
-        handleGameOver();
-      }
-    });
+    // 移动敌人和游戏结束检测（仅在游戏未暂停时执行）
+    if (!paused) {
+      state.enemies.forEach(enemy => {
+        enemy.y += enemy.speed;
+        
+        // 检查敌人是否到达底部
+        if (enemy.y >= CANVAS_HEIGHT) {
+          handleGameOver();
+        }
+        
+        // 检查敌人是否碰撞玩家
+        if (
+          enemy.x < state.player.x + TANK_SIZE &&
+          enemy.x + TANK_SIZE > state.player.x &&
+          enemy.y < state.player.y + TANK_SIZE &&
+          enemy.y + TANK_SIZE > state.player.y
+        ) {
+          handleGameOver();
+        }
+      });
+    }
   };
 
   // 绘制游戏
@@ -202,15 +286,29 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
     // 清空画布
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     
-    // 绘制经典砖墙背景
+    // 如果游戏暂停，显示暂停提示
+    if (paused) {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      ctx.fillStyle = '#FFF';
+      ctx.font = '48px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('游戏暂停', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+      ctx.font = '24px Arial';
+      ctx.fillText('按 P 继续游戏', CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2 + 40);
+      return;
+    }
+    
+    // 绘制经典砖墙背景 - 确保完全覆盖画布
     ctx.fillStyle = '#8B4513'; // 棕色砖墙
-    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    // 使用稍微大一点的尺寸确保完全覆盖canvas，不留黑色边缘
+    ctx.fillRect(-1, -1, CANVAS_WIDTH + 2, CANVAS_HEIGHT + 2);
     
     // 绘制砖块纹理
     ctx.fillStyle = '#A0522D';
     const brickSize = 20;
-    for (let y = 0; y < CANVAS_HEIGHT; y += brickSize) {
-      for (let x = 0; x < CANVAS_WIDTH; x += brickSize) {
+    for (let y = 0; y <= CANVAS_HEIGHT; y += brickSize) {
+      for (let x = 0; x <= CANVAS_WIDTH; x += brickSize) {
         if ((x + y) % (brickSize * 2) === 0) {
           ctx.fillRect(x, y, brickSize, brickSize);
         }
@@ -265,7 +363,7 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
     });
     
     // 绘制敌人
-    ctx.fillStyle = '#F44336';
+    ctx.fillStyle = '#1976D2'; // 改变敌人颜色为深蓝色，更美观
     state.enemies.forEach(enemy => {
       ctx.fillRect(enemy.x, enemy.y, TANK_SIZE, TANK_SIZE);
     });
@@ -303,6 +401,7 @@ const TankGame = ({ gameId, onScoreUpdate, onGameOver, isGameOver: parentGameOve
         <div className="game-start-screen">
           <h2>坦克大战</h2>
           <p>使用方向键移动，空格键发射子弹</p>
+          <p>P键暂停</p>
           <p>击败敌方坦克获得分数</p>
           <button onClick={startGame} className="start-button">
             开始游戏
